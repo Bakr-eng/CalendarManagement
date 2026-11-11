@@ -1,1 +1,6 @@
-<Solution />
+<Solution>
+  <Project Path="src/CalendarManagement.API/CalendarManagement.API.csproj" />
+  <Project Path="src/CalendarManagement.Application/CalendarManagement.Application.csproj" />
+  <Project Path="src/CalendarManagement.Domain/CalendarManagement.Domain.csproj" />
+  <Project Path="src/CalendarManagement.Infrastructure/CalendarManagement.Infrastructure.csproj" />
+</Solution>
