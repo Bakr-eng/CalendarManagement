@@ -6,6 +6,7 @@ namespace CalendarManagement.Infrastructure.Data;
 public class CalendarDbContext(DbContextOptions<CalendarDbContext> options) : DbContext(options)
 {
     public DbSet<Exempel> Exempel => Set<Exempel>();
+    public DbSet<Activity> Activities => Set<Activity>();
     public DbSet<Customer> Customers => Set<Customer>();
 
     protected override void OnModelCreating(ModelBuilder builder)
