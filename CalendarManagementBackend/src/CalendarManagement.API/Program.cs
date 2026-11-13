@@ -1,5 +1,7 @@
 using CalendarManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using CalendarManagement.Application.Interfaces;
+using CalendarManagement.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,12 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddControllers();
+
 var app = builder.Build();
+
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
