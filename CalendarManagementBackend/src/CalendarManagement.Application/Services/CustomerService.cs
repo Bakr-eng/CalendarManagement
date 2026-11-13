@@ -34,5 +34,5 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
     }
 
     private static CustomerDto ToDto(Customer c) =>
-        new(c.Id, c.Name, c.ContactPerson, c.Email, c.Phone);
+        new(c.Id, c.Name, c.ContactPerson, c.Email, c.Phone); 
 }
