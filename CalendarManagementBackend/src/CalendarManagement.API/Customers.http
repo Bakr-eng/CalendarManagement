@@ -1,0 +1,27 @@
+@baseUrl = http://localhost:5196
+
+GET {{baseUrl}}/api/customers
+
+###
+
+POST {{baseUrl}}/api/customers
+Content-Type: application/json
+
+{
+  "name": "Testkund AB",
+  "contactPerson": "Anna Andersson",
+  "email": "anna@testkund.se",
+  "phone": "070-123 45 67"
+}
+
+###
+
+POST {{baseUrl}}/api/customers
+Content-Type: application/json
+
+{
+  "name": ""
+}
+
+
+ {{baseUrl}}/api/customers/9999
