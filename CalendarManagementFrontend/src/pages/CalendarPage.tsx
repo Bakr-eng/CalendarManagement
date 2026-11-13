@@ -18,6 +18,12 @@ type CalendarEvent = {
   color?: string;
 };
 
+type Activity = {
+  id: number;
+  date: string;
+  type: string;
+};
+
 function CalendarPage() {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -33,10 +39,10 @@ function CalendarPage() {
 
         return res.json();
       })
-      .then((activities) => {
+      .then((activities: Activity[]) => {
         console.log("Activities:", activities);
 
-        const calendarEvents = activities.map((activity: any) => ({
+        const calendarEvents: CalendarEvent[] = activities.map((activity) => ({
           title: activity.type,
           date: activity.date,
           color: "#3b82f6",
