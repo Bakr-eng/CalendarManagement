@@ -1,4 +1,7 @@
+using CalendarManagement.API.Endpoints;
+using CalendarManagement.Application.Customers;
 using CalendarManagement.Infrastructure.Data;
+using CalendarManagement.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +10,13 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<CalendarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+// Customers
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
+
 
 builder.Services.AddCors(options =>
 {
@@ -28,5 +38,7 @@ app.UseCors("Frontend");
 
 app.MapGet("/api/exempel", async (CalendarDbContext db) =>
     await db.Exempel.ToListAsync());
+
+app.MapCustomerEndpoints();
 
 app.Run();
