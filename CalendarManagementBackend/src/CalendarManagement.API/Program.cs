@@ -4,8 +4,6 @@ using CalendarManagement.Application.Services;
 using CalendarManagement.Infrastructure.Data;
 using CalendarManagement.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using CalendarManagement.Application.Interfaces;
-using CalendarManagement.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,5 +46,4 @@ app.MapGet("/api/exempel", async (CalendarDbContext db) =>
     await db.Exempel.ToListAsync());
 
 app.MapCustomerEndpoints();
-
 app.Run();

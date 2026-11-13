@@ -1,0 +1,41 @@
+.calendar-container {
+  padding: 20px;
+}
+
+/* Tvinga över styr FullCalendars standardfärg för idag */
+.fc .fc-daygrid-day.fc-day-today:not(.fc-col-header-cell) {
+  background-color: #ff3366 !important;
+  background: #ff3366 !important;
+  border: 3px solid #ffffff !important; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8) !important;
+  transform: translateZ(0);
+  isolation: isolate;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  font-weight: bold !important;
+  font-size: 1.2em !important;
+  color: #ffffff !important;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 10px;
+  min-width: 300px;
+}
+
+.modal button {
+  margin-top: 10px;
+}
