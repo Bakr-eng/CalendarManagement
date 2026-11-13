@@ -10,27 +10,32 @@ import "./CalendarPage.css";
 
 function CalendarPage() {
   const events = [
-    {
-      title: "🎤 Gig | Joel | Stockholm",
-      date: "2026-11-15",
-    },
-    {
-      title: "🎸 Rep | Edin | Nyköping",
-      date: "2026-11-18",
-    },
-    {
-      title: "🚐 Resdag | Bakr | Göteborg",
-      date: "2026-11-20",
-    },
-    {
-      title: "🏨 Privat | Joel",
-      date: "2026-11-24",
-    },
-    {
-      title: "🎭 Pre Prod | Edin",
-      date: "2026-11-28",
-    },
-  ];
+  {
+    title: "🎤 Gig | Joel | Stockholm",
+    date: "2026-11-15",
+    color: "#3b82f6", // blå
+  },
+  {
+    title: "🎸 Rep | Edin | Nyköping",
+    date: "2026-11-18",
+    color: "#22c55e", // grön
+  },
+  {
+    title: "🚐 Resdag | Bakr | Göteborg",
+    date: "2026-11-20",
+    color: "#f59e0b", // orange
+  },
+  {
+    title: "🏨 Privat | Joel",
+    date: "2026-11-24",
+    color: "#ef4444", // röd
+  },
+  {
+    title: "🎭 Pre Prod | Edin",
+    date: "2026-11-28",
+    color: "#8b5cf6", // lila
+  },
+];
 
   return (
     <div style={{ padding: "20px" }}>
