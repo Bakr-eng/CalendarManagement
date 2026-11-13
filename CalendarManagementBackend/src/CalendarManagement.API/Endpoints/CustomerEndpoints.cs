@@ -1,4 +1,5 @@
-﻿using CalendarManagement.Application.Customers;
+﻿using CalendarManagement.Application.DTOs;
+using CalendarManagement.Application.Interfaces;
 
 namespace CalendarManagement.API.Endpoints;
 

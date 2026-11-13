@@ -24,11 +24,4 @@ Content-Type: application/json
 }
 
 
-
-###
-
-GET {{baseUrl}}/api/customers/1
-
-###
-
-GET {{baseUrl}}/api/customers/9999
+ {{baseUrl}}/api/customers/9999

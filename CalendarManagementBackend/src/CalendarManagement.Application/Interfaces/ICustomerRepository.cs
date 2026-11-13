@@ -1,6 +1,6 @@
 ﻿using CalendarManagement.Domain.Entities;
 
-namespace CalendarManagement.Application.Customers;
+namespace CalendarManagement.Application.Interfaces;
 
 public interface ICustomerRepository
 {

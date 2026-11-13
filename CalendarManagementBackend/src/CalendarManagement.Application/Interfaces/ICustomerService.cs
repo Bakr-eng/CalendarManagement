@@ -1,4 +1,6 @@
-﻿namespace CalendarManagement.Application.Customers;
+﻿using CalendarManagement.Application.DTOs;
+
+namespace CalendarManagement.Application.Interfaces;
 
 public interface ICustomerService
 {

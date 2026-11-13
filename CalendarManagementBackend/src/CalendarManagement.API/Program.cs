@@ -1,5 +1,6 @@
 using CalendarManagement.API.Endpoints;
-using CalendarManagement.Application.Customers;
+using CalendarManagement.Application.Interfaces;
+using CalendarManagement.Application.Services;
 using CalendarManagement.Infrastructure.Data;
 using CalendarManagement.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;

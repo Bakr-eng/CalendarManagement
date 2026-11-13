@@ -1,4 +1,4 @@
-﻿using CalendarManagement.Application.Customers;
+﻿using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Domain.Entities;
 using CalendarManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

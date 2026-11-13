@@ -1,6 +1,8 @@
-﻿using CalendarManagement.Domain.Entities;
+﻿using CalendarManagement.Application.DTOs;
+using CalendarManagement.Application.Interfaces;
+using CalendarManagement.Domain.Entities;
 
-namespace CalendarManagement.Application.Customers;
+namespace CalendarManagement.Application.Services;
 
 public class CustomerService(ICustomerRepository repository) : ICustomerService
 {

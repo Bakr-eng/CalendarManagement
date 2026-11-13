@@ -1,4 +1,4 @@
-﻿namespace CalendarManagement.Application.Customers;
+﻿namespace CalendarManagement.Application.DTOs;
 
 public record CustomerDto(
     int Id,
