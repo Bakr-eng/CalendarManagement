@@ -17,3 +17,25 @@
   font-size: 1.2em !important;
   color: #ffffff !important;
 }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 10px;
+  min-width: 300px;
+}
+
+.modal button {
+  margin-top: 10px;
+}

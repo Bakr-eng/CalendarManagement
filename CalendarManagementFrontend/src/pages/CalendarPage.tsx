@@ -7,8 +7,11 @@ import "@fullcalendar/react/skeleton.css";
 import "@fullcalendar/react/themes/classic/theme.css";
 import "@fullcalendar/react/themes/classic/palette.css";
 import "./CalendarPage.css";
+import { useState } from "react";
 
 function CalendarPage() {
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
+
   const events = [
   {
     title: "🎤 Gig | Joel | Stockholm",
@@ -53,9 +56,19 @@ function CalendarPage() {
         events={events}
         height="auto"
         eventClick={(info) => {
-          alert(info.event.title);
+          setSelectedEvent(info.event.title);
         }}
       />
+      {selectedEvent && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Aktivitet</h2>
+            <p>{selectedEvent}</p>
+
+            <button onClick={() => setSelectedEvent(null)}>Stäng</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
