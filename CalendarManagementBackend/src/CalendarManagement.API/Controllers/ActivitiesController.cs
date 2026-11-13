@@ -16,6 +16,7 @@ public class ActivitiesController : ControllerBase
         _repository = repository;
     }
 
+
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
