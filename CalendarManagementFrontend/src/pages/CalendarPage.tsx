@@ -6,6 +6,7 @@ import svLocale from "@fullcalendar/react/locales/sv";
 import "@fullcalendar/react/skeleton.css";
 import "@fullcalendar/react/themes/classic/theme.css";
 import "@fullcalendar/react/themes/classic/palette.css";
+import "./CalendarPage.css";
 
 function CalendarPage() {
   const events = [
@@ -46,6 +47,9 @@ function CalendarPage() {
         }}
         events={events}
         height="auto"
+        eventClick={(info) => {
+          alert(info.event.title);
+        }}
       />
     </div>
   );
