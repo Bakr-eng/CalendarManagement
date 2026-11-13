@@ -11,6 +11,7 @@ import "@fullcalendar/react/themes/classic/theme.css";
 import "@fullcalendar/react/themes/classic/palette.css";
 
 import "./CalendarPage.css";
+import CreateActivityForm from "../features/activities/components/CreateActivityForm";
 
 type CalendarEvent = {
   title: string;
@@ -27,9 +28,10 @@ type Activity = {
 function CalendarPage() {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:5196/api/activities")
+    fetch("/api/activities")
       .then((res) => {
         console.log("Status:", res.status);
 
@@ -67,6 +69,7 @@ function CalendarPage() {
         ]}
         locale={svLocale}
         initialView="dayGridMonth"
+        displayEventTime={false}
         headerToolbar={{
           left: "prev,next today",
           center: "title",
@@ -76,6 +79,9 @@ function CalendarPage() {
         height="auto"
         eventClick={(info) => {
           setSelectedEvent(info.event.title);
+        }}
+        dateClick={(info) => {
+        setSelectedDate(info.dateStr);
         }}
       />
 
@@ -92,6 +98,20 @@ function CalendarPage() {
           </div>
         </div>
       )}
+      {selectedDate && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <CreateActivityForm
+        selectedDate={selectedDate}
+        onCancel={() => setSelectedDate(null)}
+        onCreated={() => {
+          setSelectedDate(null);
+          window.location.reload();
+        }}
+      />
+    </div>
+  </div>
+)}
     </div>
   );
 }

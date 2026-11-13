@@ -1,0 +1,91 @@
+
+.create-activity-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 400px;
+  color: #1f2937;
+}
+
+.create-activity-form h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.activity-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.activity-field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.activity-field input,
+.activity-field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #111827;
+  font-size: 14px;
+}
+
+.activity-field input:focus,
+.activity-field select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.activity-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.activity-actions button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.activity-submit {
+  background: #2563eb;
+  color: white;
+}
+
+.activity-submit:hover {
+  background: #1d4ed8;
+}
+
+.activity-cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.activity-cancel:hover {
+  background: #e5e7eb;
+}
+
+.activity-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.activity-error {
+  color: #dc2626;
+  font-size: 14px;
+  margin: 0;
+}
