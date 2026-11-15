@@ -7,10 +7,10 @@ namespace CalendarManagement.Application.DTOs;
 
 public class CreateActivityDto
 {
-    [Required]
+    [Required(ErrorMessage = "Date is required.")]
     public DateTime? Date { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Activity type is required.")]
     public string Type { get; set; } = string.Empty;
 }
 public class ActivityDto

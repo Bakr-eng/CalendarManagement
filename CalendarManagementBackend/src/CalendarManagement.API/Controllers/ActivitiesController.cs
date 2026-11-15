@@ -24,19 +24,49 @@ public class ActivitiesController : ControllerBase
 
         return Ok(activities);
     }
-    
+
+
     [HttpPost]
     public async Task<IActionResult> Create(
-       [FromBody] CreateActivityDto dto)
+        [FromBody] CreateActivityDto dto)
     {
+        if (!dto.Date.HasValue)
+        {
+            return BadRequest("Date is required.");
+        }
+
+        var activityType = AllowedTypes.FirstOrDefault(
+            type => string.Equals(
+                type,
+                dto.Type?.Trim(),
+                StringComparison.OrdinalIgnoreCase
+            )
+        );
+
+        if (activityType == null)
+        {
+            return BadRequest("Invalid activity type.");
+        }
+
         var activity = new Activity
         {
-            Date = dto.Date!.Value,
-            Type = dto.Type
+            Date = dto.Date.Value,
+            Type = activityType
         };
 
         var createdActivity = await _repository.AddAsync(activity);
 
         return StatusCode(201, createdActivity);
     }
+    private static readonly string[] AllowedTypes =
+    {
+    "Gig",
+    "Private",
+    "Rehearsal",
+    "Vacation",
+    "Travel Day",
+    "Pre-production",
+    "Individual Work"
+};
+
 }
