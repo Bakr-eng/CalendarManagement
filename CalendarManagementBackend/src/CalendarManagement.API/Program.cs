@@ -8,16 +8,17 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
 
 builder.Services.AddDbContext<CalendarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 
 // Customers
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 
-
+// Activities
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
 builder.Services.AddCors(options =>
 {
@@ -27,23 +28,25 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
-builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
-builder.Services.AddControllers();
-
 var app = builder.Build();
-
-app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+else
+{
+    // Bara i produktion – under utveckling stör den React-anropen
+    app.UseHttpsRedirection();
+}
 
-app.UseHttpsRedirection();
 app.UseCors("Frontend");
+
+app.MapControllers();
 
 app.MapGet("/api/exempel", async (CalendarDbContext db) =>
     await db.Exempel.ToListAsync());
 
 app.MapCustomerEndpoints();
+
 app.Run();
