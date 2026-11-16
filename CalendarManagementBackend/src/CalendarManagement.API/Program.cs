@@ -47,6 +47,7 @@ app.MapControllers();
 app.MapGet("/api/exempel", async (CalendarDbContext db) =>
     await db.Exempel.ToListAsync());
 
+app.MapActivityEndpoints();
 app.MapCustomerEndpoints();
 
 app.Run();
