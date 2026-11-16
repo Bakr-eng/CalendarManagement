@@ -27,7 +27,12 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddControllers();
+
 var app = builder.Build();
+
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
@@ -41,5 +46,4 @@ app.MapGet("/api/exempel", async (CalendarDbContext db) =>
     await db.Exempel.ToListAsync());
 
 app.MapCustomerEndpoints();
-
 app.Run();
