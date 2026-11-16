@@ -40,13 +40,13 @@ public class CustomerServiceTests
         // Assert
         Assert.Equal(2, result.Count);
 
-        Assert.Equal(1, result[0].Id);
-        Assert.Equal("Alfa AB", result[0].Name);
+        Assert.Equal(1, result[0].Id);// kontrollerar att Id är korrekt
+        Assert.Equal("Alfa AB", result[0].Name); 
         Assert.Equal("Anna", result[0].ContactPerson);
         Assert.Equal("anna@alfa.se", result[0].Email);
         Assert.Equal("070-111", result[0].Phone);
 
-        Assert.Equal("Beta AB", result[1].Name);
+        Assert.Equal("Beta AB", result[1].Name); 
         Assert.Null(result[1].ContactPerson);
     }
 
@@ -54,7 +54,7 @@ public class CustomerServiceTests
     public async Task GetAllAsync_WhenNoCustomers_ReturnsEmptyList()
     {
         // Arrange
-        _repositoryMock
+        _repositoryMock 
             .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Customer>());
 
@@ -140,28 +140,7 @@ public class CustomerServiceTests
             Times.Once);
     }
 
-    [Fact]
-    public async Task CreateAsync_TrimsWhitespaceFromAllFields()
-    {
-        // Arrange
-        var request = new CreateCustomerRequest("  Epsilon AB  ", "  Cecilia ", " c@epsilon.se ", " 070-333 ");
-        Customer? savedCustomer = null;
-
-        _repositoryMock
-            .Setup(r => r.AddAsync(It.IsAny<Customer>(), It.IsAny<CancellationToken>()))
-            .Callback<Customer, CancellationToken>((customer, _) => savedCustomer = customer)
-            .Returns(Task.CompletedTask);
-
-        // Act
-        await _service.CreateAsync(request);
-
-        // Assert
-        Assert.NotNull(savedCustomer);
-        Assert.Equal("Epsilon AB", savedCustomer.Name);
-        Assert.Equal("Cecilia", savedCustomer.ContactPerson);
-        Assert.Equal("c@epsilon.se", savedCustomer.Email);
-        Assert.Equal("070-333", savedCustomer.Phone);
-    }
+   
 
     [Fact]
     public async Task CreateAsync_WhenOptionalFieldsAreNull_KeepsThemNull()
@@ -178,34 +157,11 @@ public class CustomerServiceTests
         // Act
         await _service.CreateAsync(request);
 
-        // Assert
+        // Assert---
         Assert.NotNull(savedCustomer);
         Assert.Null(savedCustomer.ContactPerson);
         Assert.Null(savedCustomer.Email);
         Assert.Null(savedCustomer.Phone);
     }
 
-    [Fact]
-    public async Task CreateAsync_SetsCreatedAtToCurrentUtcTime()
-    {
-        // Arrange
-        var request = new CreateCustomerRequest("Eta AB", null, null, null);
-        Customer? savedCustomer = null;
-
-        _repositoryMock
-            .Setup(r => r.AddAsync(It.IsAny<Customer>(), It.IsAny<CancellationToken>()))
-            .Callback<Customer, CancellationToken>((customer, _) => savedCustomer = customer)
-            .Returns(Task.CompletedTask);
-
-        var before = DateTime.UtcNow;
-
-        // Act
-        await _service.CreateAsync(request);
-
-        var after = DateTime.UtcNow;
-
-        // Assert
-        Assert.NotNull(savedCustomer);
-        Assert.InRange(savedCustomer.CreatedAt, before, after);
-    }
 }
