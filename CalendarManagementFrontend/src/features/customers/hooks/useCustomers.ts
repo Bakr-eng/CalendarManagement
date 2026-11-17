@@ -1,3 +1,4 @@
+//Hämtar och håller kunderna------------
 import { useEffect, useState } from "react";
 import { createCustomer, getCustomers } from "../api/customersApi";
 import type { Customer, CreateCustomerRequest } from "../types/customer";
@@ -17,7 +18,7 @@ export function useCustomers() {
       .catch((err: unknown) => {
         if (!ignore) setError(err instanceof Error ? err.message : "Något gick fel");
       })
-      .finally(() => {
+      .finally(() => { //körs alltid, oavsett om det gick bra eller fel
         if (!ignore) setIsLoading(false);
       });
 
