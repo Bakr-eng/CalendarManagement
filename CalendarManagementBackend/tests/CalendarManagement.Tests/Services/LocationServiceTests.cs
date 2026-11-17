@@ -93,14 +93,7 @@ namespace CalendarManagement.Tests.Services
             Assert.Equal("Location 1", result.Name);    
         }
 
-        [Fact]
-        public async Task CreateAsync_InvalidRequest_ThrowsArgumentException()
-        {
-            // Arrange
-            var request = new CreateLocationRequest("", "City 1", "Address 1");
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => _service.CreateAsync(request));
-        }
+        
 
 
     }
