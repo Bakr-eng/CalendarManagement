@@ -1,7 +1,7 @@
 ﻿
 namespace CalendarManagement.Application.DTOs;
 
-public record CreateLocationDto(
+public record CreateLocationRequest(
     string Name,
     string City,
     string? Address
