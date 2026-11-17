@@ -18,7 +18,7 @@ namespace CalendarManagement.Application.Services
             return location is null ? null : ToDto(location);
         }
 
-        public async Task<LocationDto> CreateAsync(CreateLocationDto request, CancellationToken ct = default)
+        public async Task<LocationDto> CreateAsync(CreateLocationRequest request, CancellationToken ct = default)
         {
             var location = new Location
             {

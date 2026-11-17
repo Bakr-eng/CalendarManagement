@@ -9,7 +9,7 @@ namespace CalendarManagement.Application.Interfaces
 
      Task<LocationDto?> GetByIdAsync(int id, CancellationToken ct = default);
 
-        Task<LocationDto> CreateAsync(CreateLocationDto request, CancellationToken ct = default);
+        Task<LocationDto> CreateAsync(CreateLocationRequest request, CancellationToken ct = default);
 
 
     }

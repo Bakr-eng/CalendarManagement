@@ -18,7 +18,7 @@ namespace CalendarManagement.API.Endpoints
                 return location is null ? Results.NotFound() : Results.Ok(location);
             }).WithName("GetLocationById");
 
-            group.MapPost("/", async (CreateLocationDto request, ILocationService service, CancellationToken ct) =>
+            group.MapPost("/", async (CreateLocationRequest request, ILocationService service, CancellationToken ct) =>
             {
                 var errors = new Dictionary<string, string[]>();
 
