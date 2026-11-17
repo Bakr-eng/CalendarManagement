@@ -9,6 +9,8 @@ public class CalendarDbContext(DbContextOptions<CalendarDbContext> options) : Db
     public DbSet<Activity> Activities => Set<Activity>();
     public DbSet<Customer> Customers => Set<Customer>();
 
+    public DbSet<Location> Locations => Set<Location>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

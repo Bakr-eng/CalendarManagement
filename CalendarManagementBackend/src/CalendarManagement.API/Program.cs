@@ -20,6 +20,11 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 // Activities
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
+// Locations
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -49,5 +54,6 @@ app.MapGet("/api/exempel", async (CalendarDbContext db) =>
 
 app.MapActivityEndpoints();
 app.MapCustomerEndpoints();
+app.MapLocationEndpoints();
 
 app.Run();
