@@ -1,13 +1,13 @@
 import type { Location, CreateLocationRequest } from "../types/location";
 
 // Anropen går via Vite-proxyn i vite.config.ts till backend
-const BASE_URL = "/api/location";
+const BASE_URL = "/api/locations";
 
-export async function getLocation(): Promise<Location[]> {
+export async function getLocations(): Promise<Location[]> {
   const response = await fetch(BASE_URL);
 
   if (!response.ok) {
-    throw new Error("Kunde inte hämta platsen");
+    throw new Error("Kunde inte hämta platser");
   }
 
   return response.json();
