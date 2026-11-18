@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import type { CreateCustomerRequest } from "../types/customer";
 
 interface CustomerFormProps {
@@ -13,7 +13,7 @@ export function CustomerForm({ onSubmit }: CustomerFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!name.trim()) {

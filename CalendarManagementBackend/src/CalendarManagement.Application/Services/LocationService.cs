@@ -20,6 +20,16 @@ namespace CalendarManagement.Application.Services
 
         public async Task<LocationDto> CreateAsync(CreateLocationRequest request, CancellationToken ct = default)
         {
+            if (string.IsNullOrWhiteSpace(request.Name))
+            {
+                throw new ArgumentException("Namn måste fyllas i.", nameof(request));
+            }
+
+            if (string.IsNullOrWhiteSpace(request.City))
+            {
+                throw new ArgumentException("Stad måste fyllas i.", nameof(request));
+            }
+
             var location = new Location
             {
                 Name = request.Name.Trim(),
