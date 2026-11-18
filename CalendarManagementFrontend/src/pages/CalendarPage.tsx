@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/react/daygrid";
@@ -14,6 +15,7 @@ import "./CalendarPage.css";
 import CreateActivityForm from "../features/activities/components/CreateActivityForm";
 
 type CalendarEvent = {
+  id: string;
   title: string;
   date: string;
   color?: string;
@@ -26,7 +28,8 @@ type Activity = {
 };
 
 function CalendarPage() {
-  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
+  const navigate = useNavigate();
+
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
@@ -44,11 +47,14 @@ function CalendarPage() {
       .then((activities: Activity[]) => {
         console.log("Activities:", activities);
 
-        const calendarEvents: CalendarEvent[] = activities.map((activity) => ({
-          title: activity.type,
-          date: activity.date,
-          color: "#3b82f6",
-        }));
+        const calendarEvents: CalendarEvent[] = activities.map(
+          (activity) => ({
+            id: activity.id.toString(),
+            title: activity.type,
+            date: activity.date,
+            color: "#3b82f6",
+          })
+        );
 
         setEvents(calendarEvents);
       })
@@ -78,40 +84,27 @@ function CalendarPage() {
         events={events}
         height="auto"
         eventClick={(info) => {
-          setSelectedEvent(info.event.title);
+          navigate(`/activities/${info.event.id}`);
         }}
         dateClick={(info) => {
-        setSelectedDate(info.dateStr);
+          setSelectedDate(info.dateStr);
         }}
       />
 
-      {selectedEvent && (
+      {selectedDate && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Aktivitet</h2>
-
-            <p>{selectedEvent}</p>
-
-            <button onClick={() => setSelectedEvent(null)}>
-              Stäng
-            </button>
+            <CreateActivityForm
+              selectedDate={selectedDate}
+              onCancel={() => setSelectedDate(null)}
+              onCreated={() => {
+                setSelectedDate(null);
+                window.location.reload();
+              }}
+            />
           </div>
         </div>
       )}
-      {selectedDate && (
-  <div className="modal-overlay">
-    <div className="modal">
-      <CreateActivityForm
-        selectedDate={selectedDate}
-        onCancel={() => setSelectedDate(null)}
-        onCreated={() => {
-          setSelectedDate(null);
-          window.location.reload();
-        }}
-      />
-    </div>
-  </div>
-)}
     </div>
   );
 }

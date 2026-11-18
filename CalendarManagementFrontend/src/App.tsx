@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import CalendarPage from "./pages/CalendarPage";
 import CustomersPage from "./pages/CustomersPage";
 import LocationsPage from "./pages/LocationsPage";
+import ActivityDetailsPage from "./pages/ActivityDetailsPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/customers" element={<CustomersPage />} />
         <Route path="/locations" element={<LocationsPage />} />
+        <Route path="/activities/:id" element={<ActivityDetailsPage />} />
       </Routes>
     </BrowserRouter>
   );

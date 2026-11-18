@@ -1,5 +1,4 @@
-﻿
-using CalendarManagement.Application.DTOs;
+﻿using CalendarManagement.Application.DTOs;
 using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Domain.Entities;
 
@@ -29,6 +28,22 @@ public static class ActivityEndpoints
             var activities = await repository.GetAllAsync();
 
             return Results.Ok(activities);
+        });
+
+        group.MapGet("/{id:int}", async (
+            int id,
+            IActivityRepository repository) =>
+        {
+            var activities = await repository.GetAllAsync();
+
+            var activity = activities.FirstOrDefault(a => a.Id == id);
+
+            if (activity is null)
+            {
+                return Results.NotFound();
+            }
+
+            return Results.Ok(activity);
         });
 
         group.MapPost("/", async (
