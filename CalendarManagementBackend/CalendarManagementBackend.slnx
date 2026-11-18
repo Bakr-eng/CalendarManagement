@@ -3,4 +3,5 @@
   <Project Path="src/CalendarManagement.Application/CalendarManagement.Application.csproj" />
   <Project Path="src/CalendarManagement.Domain/CalendarManagement.Domain.csproj" />
   <Project Path="src/CalendarManagement.Infrastructure/CalendarManagement.Infrastructure.csproj" />
+  <Project Path="tests/CalendarManagement.Tests/CalendarManagement.Tests.csproj" Id="7d70c330-df9f-4d6d-a526-4e82fafa5d64" />
 </Solution>
