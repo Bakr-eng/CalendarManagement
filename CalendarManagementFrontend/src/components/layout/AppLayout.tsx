@@ -27,28 +27,31 @@ function AppLayout() {
           onClick={() => setIsOpen((prev) => !prev)}
           aria-label={isOpen ? "Stäng meny" : "Öppna meny"}
           aria-expanded={isOpen}
+          aria-controls="sidebar-nav"
         >
           ☰
         </button>
 
-        <nav className="sidebar-nav" aria-label="Huvudmeny">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
-              className={({ isActive }) =>
-                isActive ? "sidebar-link sidebar-link-active" : "sidebar-link"
-              }
-              title={item.label}
-            >
-              <span className="sidebar-icon" aria-hidden="true">
-                {item.icon}
-              </span>
-              <span className="sidebar-label">{item.label}</span>
-            </NavLink>
-          ))}
-        </nav>
+        {/* Länkarna finns bara när menyn är öppen */}
+        {isOpen && (
+          <nav id="sidebar-nav" className="sidebar-nav" aria-label="Huvudmeny">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === "/"}
+                className={({ isActive }) =>
+                  isActive ? "sidebar-link sidebar-link-active" : "sidebar-link"
+                }
+              >
+                <span className="sidebar-icon" aria-hidden="true">
+                  {item.icon}
+                </span>
+                <span className="sidebar-label">{item.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+        )}
       </aside>
 
       <main className="layout-content">
