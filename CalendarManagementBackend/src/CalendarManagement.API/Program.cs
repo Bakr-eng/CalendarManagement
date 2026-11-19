@@ -17,6 +17,9 @@ builder.Services.AddDbContext<CalendarDbContext>(options =>
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 
+// Users
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 // Activities
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
@@ -55,5 +58,6 @@ app.MapGet("/api/exempel", async (CalendarDbContext db) =>
 app.MapActivityEndpoints();
 app.MapCustomerEndpoints();
 app.MapLocationEndpoints();
+app.MapUserEndpoints();
 
 app.Run();

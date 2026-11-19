@@ -8,7 +8,7 @@ public class CalendarDbContext(DbContextOptions<CalendarDbContext> options) : Db
     public DbSet<Exempel> Exempel => Set<Exempel>();
     public DbSet<Activity> Activities => Set<Activity>();
     public DbSet<Customer> Customers => Set<Customer>();
-
+    public DbSet<User> Users => Set<User>();
     public DbSet<Location> Locations => Set<Location>();
 
     protected override void OnModelCreating(ModelBuilder builder)
