@@ -1,0 +1,99 @@
+.layout {
+  --layout-accent: #ee6a2c;
+
+  display: flex;
+  min-height: 100svh;
+}
+
+/* ---------- Sidomenyn ---------- */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 64px;
+  flex-shrink: 0;
+  padding: 12px 8px;
+  box-sizing: border-box;
+  border-right: 1px solid var(--border);
+  background: var(--code-bg);
+  transition: width 0.2s;
+}
+
+.sidebar-open {
+  width: 200px;
+}
+
+.sidebar-toggle {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-h);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.sidebar-toggle:hover {
+  background: var(--border);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: var(--text-h);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-link:hover {
+  background: var(--border);
+}
+
+.sidebar-link-active {
+  color: var(--layout-accent);
+  background: var(--border);
+  font-weight: 600;
+}
+
+.sidebar-toggle:focus-visible,
+.sidebar-link:focus-visible {
+  outline: 2px solid var(--layout-accent);
+  outline-offset: 2px;
+}
+
+.sidebar-icon {
+  font-size: 22px;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Texten syns bara när menyn är öppen */
+.sidebar-label {
+  display: none;
+}
+
+.sidebar-open .sidebar-label {
+  display: inline;
+}
+
+/* ---------- Innehållet ---------- */
+
+.layout-content {
+  flex: 1;
+  min-width: 0;
+  padding: 0 16px;
+}
