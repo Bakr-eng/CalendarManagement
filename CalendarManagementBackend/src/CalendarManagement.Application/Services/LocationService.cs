@@ -1,6 +1,7 @@
 ﻿using CalendarManagement.Application.DTOs;
 using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Domain.Entities;
+using CalendarManagement.Application.Exceptions;
 
 namespace CalendarManagement.Application.Services
 {
@@ -20,15 +21,7 @@ namespace CalendarManagement.Application.Services
 
         public async Task<LocationDto> CreateAsync(CreateLocationRequest request, CancellationToken ct = default)
         {
-            if (string.IsNullOrWhiteSpace(request.Name))
-            {
-                throw new ArgumentException("Namn måste fyllas i.", nameof(request));
-            }
-
-            if (string.IsNullOrWhiteSpace(request.City))
-            {
-                throw new ArgumentException("Stad måste fyllas i.", nameof(request));
-            }
+            Validate(request);
 
             var location = new Location
             {
@@ -40,7 +33,25 @@ namespace CalendarManagement.Application.Services
             await repository.AddAsync(location, ct);
             return ToDto(location);
         }
+        private static void Validate(CreateLocationRequest request)
+        {
+            var errors = new Dictionary<string, string[]>();
 
+            if (string.IsNullOrWhiteSpace(request.Name))
+            {
+                errors["name"] = ["Namn måste fyllas i."];
+            }
+
+            if (string.IsNullOrWhiteSpace(request.City))
+            {
+                errors["city"] = ["Stad måste fyllas i."];
+            }
+
+            if (errors.Count > 0)
+            {
+                throw new RequestValidationException(errors);
+            }
+        }
         private static LocationDto ToDto(Location l) =>
             new(l.Id, l.Name, l.City, l.Address);
     }

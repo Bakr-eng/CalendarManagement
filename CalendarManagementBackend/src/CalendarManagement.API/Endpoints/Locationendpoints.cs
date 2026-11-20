@@ -20,23 +20,6 @@ namespace CalendarManagement.API.Endpoints
 
             group.MapPost("/", async (CreateLocationRequest request, ILocationService service, CancellationToken ct) =>
             {
-                var errors = new Dictionary<string, string[]>();
-
-                if (string.IsNullOrWhiteSpace(request.Name))
-                {
-                    errors["name"] = ["Namn måste fyllas i."];
-                }
-
-                if (string.IsNullOrWhiteSpace(request.City))
-                {
-                    errors["city"] = ["Stad måste fyllas i."];
-                }
-
-                if (errors.Count > 0)
-                {
-                    return Results.ValidationProblem(errors);
-                }
-
                 var created = await service.CreateAsync(request, ct);
                 return Results.CreatedAtRoute("GetLocationById", new { id = created.Id }, created);
             });

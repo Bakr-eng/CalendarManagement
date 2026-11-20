@@ -2,6 +2,7 @@
 using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Application.Services;
 using CalendarManagement.Domain.Entities;
+using CalendarManagement.Application.Exceptions;
 using Moq;
 
 namespace CalendarManagement.Tests.Services
@@ -102,13 +103,13 @@ namespace CalendarManagement.Tests.Services
         [InlineData("")]
         [InlineData("   ")]
         [InlineData(null)]
-        public async Task CreateAsync_EmptyName_ThrowsArgumentException(string? name)
+        public async Task CreateAsync_EmptyName_ThrowsValidationException(string? name)
         {
             // Arrange
             var request = new CreateLocationRequest(name!, "City 1", null);
 
             // Act + Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => _service.CreateAsync(request));
+            await Assert.ThrowsAsync<RequestValidationException>(() => _service.CreateAsync(request));
 
             _repositoryMock.Verify(
                 repo => repo.AddAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()),
@@ -119,13 +120,13 @@ namespace CalendarManagement.Tests.Services
         [InlineData("")]
         [InlineData("   ")]
         [InlineData(null)]
-        public async Task CreateAsync_EmptyCity_ThrowsArgumentException(string? city)
+        public async Task CreateAsync_EmptyCity_ThrowsValidationException(string? city)
         {
             // Arrange
             var request = new CreateLocationRequest("Location 1", city!, null);
 
             // Act + Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => _service.CreateAsync(request));
+            await Assert.ThrowsAsync<RequestValidationException>(() => _service.CreateAsync(request));
 
             _repositoryMock.Verify(
                 repo => repo.AddAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()),

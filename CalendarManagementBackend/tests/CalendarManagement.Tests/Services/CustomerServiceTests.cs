@@ -2,6 +2,7 @@
 using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Application.Services;
 using CalendarManagement.Domain.Entities;
+using CalendarManagement.Application.Exceptions;
 using Moq;
 
 namespace CalendarManagement.Tests.Services;
@@ -164,4 +165,24 @@ public class CustomerServiceTests
         Assert.Null(savedCustomer.Phone);
     }
 
-}
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData(null)]
+    public async Task CreateAsync_EmptyName_ThrowsValidationException(string? name)
+    {
+        // Arrange
+        var request = new CreateCustomerRequest(name!, null, null, null);
+
+        // Act + Assert
+        var exception = await Assert.ThrowsAsync<RequestValidationException>(
+            () => _service.CreateAsync(request));
+
+        Assert.True(exception.Errors.ContainsKey("name"));
+
+        _repositoryMock.Verify(
+            r => r.AddAsync(It.IsAny<Customer>(), It.IsAny<CancellationToken>()),
+            Times.Never);
+    }
+
+}   

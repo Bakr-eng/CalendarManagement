@@ -1,38 +1,57 @@
 ﻿using CalendarManagement.Application.DTOs;
+using CalendarManagement.Application.Exceptions;
 using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Domain.Entities;
 
-namespace CalendarManagement.Application.Services;
-
-public class CustomerService(ICustomerRepository repository) : ICustomerService
+namespace CalendarManagement.Application.Services
 {
-    public async Task<List<CustomerDto>> GetAllAsync(CancellationToken ct = default)
+    public class CustomerService(ICustomerRepository repository) : ICustomerService
     {
-        var customers = await repository.GetAllAsync(ct);
-        return customers.Select(ToDto).ToList();
-    }
-
-    public async Task<CustomerDto?> GetByIdAsync(int id, CancellationToken ct = default)
-    {
-        var customer = await repository.GetByIdAsync(id, ct);
-        return customer is null ? null : ToDto(customer);
-    }
-
-    public async Task<CustomerDto> CreateAsync(CreateCustomerRequest request, CancellationToken ct = default)
-    {
-        var customer = new Customer
+        public async Task<List<CustomerDto>> GetAllAsync(CancellationToken ct = default)
         {
-            Name = request.Name.Trim(),
-            ContactPerson = request.ContactPerson?.Trim(),
-            Email = request.Email?.Trim(),
-            Phone = request.Phone?.Trim(),
-            CreatedAt = DateTime.UtcNow
-        };
+            var customers = await repository.GetAllAsync(ct);
+            return customers.Select(ToDto).ToList();
+        }
 
-        await repository.AddAsync(customer, ct);
-        return ToDto(customer);
+        public async Task<CustomerDto?> GetByIdAsync(int id, CancellationToken ct = default)
+        {
+            var customer = await repository.GetByIdAsync(id, ct);
+            return customer is null ? null : ToDto(customer);
+        }
+
+        public async Task<CustomerDto> CreateAsync(CreateCustomerRequest request, CancellationToken ct = default)
+        {
+            Validate(request);
+
+            var customer = new Customer
+            {
+                Name = request.Name.Trim(),
+                ContactPerson = request.ContactPerson?.Trim(),
+                Email = request.Email?.Trim(),
+                Phone = request.Phone?.Trim(),
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await repository.AddAsync(customer, ct);
+            return ToDto(customer);
+        }
+
+        private static void Validate(CreateCustomerRequest request)
+        {
+            var errors = new Dictionary<string, string[]>();
+
+            if (string.IsNullOrWhiteSpace(request.Name))
+            {
+                errors["name"] = ["Namn måste fyllas i."];
+            }
+
+            if (errors.Count > 0)
+            {
+                throw new RequestValidationException(errors);
+            }
+        }
+
+        private static CustomerDto ToDto(Customer c) =>
+            new(c.Id, c.Name, c.ContactPerson, c.Email, c.Phone);
     }
-
-    private static CustomerDto ToDto(Customer c) =>
-        new(c.Id, c.Name, c.ContactPerson, c.Email, c.Phone); 
 }
