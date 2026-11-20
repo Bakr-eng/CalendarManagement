@@ -1,7 +1,9 @@
 
-import { useState, type SubmitEvent } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
+import { getUsers, type User } from "../services/userService";
 import { createActivity } from "../services/activityService";
 import "./CreateActivityForm.css";
+
 
 type Props = {
   selectedDate?: string;
@@ -28,6 +30,39 @@ export default function CreateActivityForm({
   const [type, setType] = useState("Gig");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [users, setUsers] = useState<User[]>([]);
+  const [usersLoading, setUsersLoading] = useState(true);
+  const [usersError, setUsersError] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState("");
+
+
+useEffect(() => {
+  let active = true;
+
+  async function loadUsers() {
+    try {
+      const data = await getUsers();
+
+      if (active) {
+        setUsers(data);
+      }
+    } catch {
+      if (active) {
+        setUsersError("Could not load users.");
+      }
+    } finally {
+      if (active) {
+        setUsersLoading(false);
+      }
+    }
+  }
+
+  loadUsers();
+
+  return () => {
+    active = false;
+  };
+}, []);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,10 +71,15 @@ export default function CreateActivityForm({
     setError("");
 
     try {
-      await createActivity({
-        date: `${date}T00:00:00`,
-        type,
-      });
+      
+await createActivity({
+  date: `${date}T00:00:00`,
+  type,
+  responsiblePersonId: selectedUserId
+    ? Number(selectedUserId)
+    : null,
+});
+
 
       onCreated?.();
     } catch {
@@ -55,7 +95,13 @@ export default function CreateActivityForm({
     className="create-activity-form"
   >
     <h2>Create Activity</h2>
+{usersLoading && <p>Loading users...</p>}
 
+{usersError && (
+  <p className="activity-error" role="alert">
+    {usersError}
+  </p>
+)}
     <div className="activity-field">
       <label htmlFor="date">Date</label>
       <input
@@ -81,6 +127,28 @@ export default function CreateActivityForm({
         ))}
       </select>
     </div>
+
+<div className="activity-field">
+  <label htmlFor="responsiblePerson">
+    Responsible person
+  </label>
+
+  <select
+    id="responsiblePerson"
+    value={selectedUserId}
+    onChange={(e) => setSelectedUserId(e.target.value)}
+    disabled={usersLoading || !!usersError}
+  >
+    <option value="">Not assigned</option>
+
+    {users.map((user) => (
+      <option key={user.id} value={user.id}>
+        {user.name}
+      </option>
+    ))}
+  </select>
+</div>
+
 
     {error && (
       <p className="activity-error" role="alert">

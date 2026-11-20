@@ -19,6 +19,7 @@ public class ActivityRepository : IActivityRepository
     public async Task<List<Activity>> GetAllAsync()
     {
         return await _context.Activities
+            .Include(a => a.ResponsiblePerson)
             .AsNoTracking()
             .ToListAsync();
     }

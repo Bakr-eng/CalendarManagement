@@ -33,11 +33,16 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ResponsiblePersonId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ResponsiblePersonId");
 
                     b.ToTable("Activities");
                 });
@@ -102,6 +107,32 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations");
+                });
+
+            modelBuilder.Entity("CalendarManagement.Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CalendarManagement.Domain.Entities.Activity", b =>
+                {
+                    b.HasOne("CalendarManagement.Domain.Entities.User", "ResponsiblePerson")
+                        .WithMany()
+                        .HasForeignKey("ResponsiblePersonId");
+
+                    b.Navigation("ResponsiblePerson");
                 });
 #pragma warning restore 612, 618
         }

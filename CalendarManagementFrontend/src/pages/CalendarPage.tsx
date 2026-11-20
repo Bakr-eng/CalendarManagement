@@ -19,12 +19,18 @@ type CalendarEvent = {
   title: string;
   date: string;
   color?: string;
+  responsiblePersonName: string;
 };
 
 type Activity = {
   id: number;
   date: string;
   type: string;
+  responsiblePersonId: number | null;
+  responsiblePerson: {
+    id: number;
+    name: string;
+  } | null;
 };
 
 function CalendarPage() {
@@ -53,6 +59,8 @@ function CalendarPage() {
             title: activity.type,
             date: activity.date,
             color: "#3b82f6",
+            responsiblePersonName:
+            activity.responsiblePerson?.name ?? "Not assigned",
           })
         );
 

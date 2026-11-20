@@ -12,6 +12,7 @@ public class CreateActivityDto
 
     [Required(ErrorMessage = "Activity type is required.")]
     public string Type { get; set; } = string.Empty;
+    public int? ResponsiblePersonId { get; set; }
 }
 public class ActivityDto
 {
