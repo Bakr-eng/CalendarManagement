@@ -8,5 +8,6 @@ public interface IActivityRepository
 {
     Task<List<Activity>> GetAllAsync();
     Task<Activity> AddAsync(Activity activity);
+    Task<Activity?> GetByIdAsync(int id);
 }
 

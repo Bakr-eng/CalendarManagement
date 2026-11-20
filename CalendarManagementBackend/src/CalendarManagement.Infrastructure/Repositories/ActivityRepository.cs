@@ -23,6 +23,13 @@ public class ActivityRepository : IActivityRepository
             .AsNoTracking()
             .ToListAsync();
     }
+    public async Task<Activity?> GetByIdAsync(int id)
+    {
+        return await _context.Activities
+            .Include(a => a.ResponsiblePerson)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Id == id);
+    }
     public async Task<Activity> AddAsync(Activity activity)
     {
         _context.Activities.Add(activity);

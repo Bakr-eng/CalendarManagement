@@ -33,10 +33,7 @@ public class ActivityService(
         int id,
         CancellationToken ct = default)
     {
-        var activities = await repository.GetAllAsync();
-
-        var activity = activities
-            .FirstOrDefault(a => a.Id == id);
+        var activity = await repository.GetByIdAsync(id);
 
         return activity is null ? null : ToDto(activity);
     }
