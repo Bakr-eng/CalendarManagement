@@ -24,7 +24,7 @@ public class ActivityService(
     public async Task<List<ActivityDto>> GetAllAsync(
         CancellationToken ct = default)
     {
-        var activities = await repository.GetAllAsync();
+        var activities = await repository.GetAllAsync(ct);
 
         return activities.Select(ToDto).ToList();
     }
@@ -33,7 +33,7 @@ public class ActivityService(
         int id,
         CancellationToken ct = default)
     {
-        var activity = await repository.GetByIdAsync(id);
+        var activity = await repository.GetByIdAsync(id, ct);
 
         return activity is null ? null : ToDto(activity);
     }
@@ -64,7 +64,7 @@ public class ActivityService(
         if (request.ResponsiblePersonId.HasValue)
         {
             var user = await userRepository.GetByIdAsync(
-                request.ResponsiblePersonId.Value);
+                request.ResponsiblePersonId.Value, ct);
 
             if (user is null)
             {
@@ -85,14 +85,14 @@ public class ActivityService(
             ResponsiblePersonId = request.ResponsiblePersonId
         };
 
-        await repository.AddAsync(activity);
+        await repository.AddAsync(activity, ct);
 
         // Hämta personen för DTO-svaret
         if (activity.ResponsiblePersonId.HasValue)
         {
             activity.ResponsiblePerson =
                 await userRepository.GetByIdAsync(
-                    activity.ResponsiblePersonId.Value);
+                    activity.ResponsiblePersonId.Value, ct);
         }
 
         return ToDto(activity);

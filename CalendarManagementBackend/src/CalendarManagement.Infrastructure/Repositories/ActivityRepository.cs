@@ -16,21 +16,25 @@ public class ActivityRepository : IActivityRepository
         _context = context;
     }
 
-    public async Task<List<Activity>> GetAllAsync()
+    public async Task<List<Activity>> GetAllAsync(
+        CancellationToken ct = default)
     {
         return await _context.Activities
             .Include(a => a.ResponsiblePerson)
             .AsNoTracking()
             .ToListAsync();
     }
-    public async Task<Activity?> GetByIdAsync(int id)
+    public async Task<Activity?> GetByIdAsync(int id,
+        CancellationToken ct = default)
     {
         return await _context.Activities
             .Include(a => a.ResponsiblePerson)
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
     }
-    public async Task<Activity> AddAsync(Activity activity)
+    public async Task<Activity> AddAsync(
+        Activity activity,
+        CancellationToken ct = default)
     {
         _context.Activities.Add(activity);
 

@@ -6,10 +6,7 @@ type Activity = {
   date: string;
   type: string;
   responsiblePersonId: number | null;
-  responsiblePerson: {
-    id: number;
-    name: string;
-  } | null;
+  responsiblePersonName: string | null;
 };
 
 function ActivityDetailsPage() {
