@@ -24,7 +24,6 @@ builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 
-
 var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? [];
@@ -54,8 +53,6 @@ app.UseCors("Frontend");
 
 app.MapControllers();
 
-app.MapGet("/api/exempel", async (CalendarDbContext db) =>
-    await db.Exempel.ToListAsync());
 
 app.MapActivityEndpoints();
 app.MapCustomerEndpoints();
