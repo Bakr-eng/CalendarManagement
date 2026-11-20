@@ -1,4 +1,5 @@
 using CalendarManagement.API.Endpoints;
+using CalendarManagement.API.ErrorHandling;
 using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Application.Services;
 using CalendarManagement.Infrastructure.Data;
@@ -7,8 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 
 builder.Services.AddDbContext<CalendarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -36,8 +41,10 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
-
 var app = builder.Build();
+
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
@@ -45,14 +52,12 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    // Bara i produktion – under utveckling stör den React-anropen
     app.UseHttpsRedirection();
 }
 
 app.UseCors("Frontend");
 
 app.MapControllers();
-
 
 app.MapActivityEndpoints();
 app.MapCustomerEndpoints();

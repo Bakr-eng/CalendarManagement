@@ -23,5 +23,6 @@ Content-Type: application/json
   "name": ""
 }
 
+###
 
- {{baseUrl}}/api/customers/9999
+GET {{baseUrl}}/api/customers/9999

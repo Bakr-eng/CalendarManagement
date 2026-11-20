@@ -1,35 +1,28 @@
 ﻿using CalendarManagement.Application.DTOs;
 using CalendarManagement.Application.Interfaces;
 
-namespace CalendarManagement.API.Endpoints;
-
-public static class CustomerEndpoints
+namespace CalendarManagement.API.Endpoints
 {
-    public static void MapCustomerEndpoints(this IEndpointRouteBuilder app)
+    public static class CustomerEndpoints
     {
-        var group = app.MapGroup("/api/customers").WithTags("Customers");
-
-        group.MapGet("/", async (ICustomerService service, CancellationToken ct) =>
-            Results.Ok(await service.GetAllAsync(ct)));
-
-        group.MapGet("/{id:int}", async (int id, ICustomerService service, CancellationToken ct) =>
+        public static void MapCustomerEndpoints(this IEndpointRouteBuilder app)
         {
-            var customer = await service.GetByIdAsync(id, ct);
-            return customer is null ? Results.NotFound() : Results.Ok(customer);
-        }).WithName("GetCustomerById");
+            var group = app.MapGroup("/api/customers").WithTags("Customers");
 
-        group.MapPost("/", async (CreateCustomerRequest request, ICustomerService service, CancellationToken ct) =>
-        {
-            if (string.IsNullOrWhiteSpace(request.Name))
+            group.MapGet("/", async (ICustomerService service, CancellationToken ct) =>
+                Results.Ok(await service.GetAllAsync(ct)));
+
+            group.MapGet("/{id:int}", async (int id, ICustomerService service, CancellationToken ct) =>
             {
-                return Results.ValidationProblem(new Dictionary<string, string[]>
-                {
-                    ["name"] = ["Namn måste fyllas i."]
-                });
-            }
+                var customer = await service.GetByIdAsync(id, ct);
+                return customer is null ? Results.NotFound() : Results.Ok(customer);
+            }).WithName("GetCustomerById");
 
-            var created = await service.CreateAsync(request, ct);
-            return Results.CreatedAtRoute("GetCustomerById", new { id = created.Id }, created);
-        });
+            group.MapPost("/", async (CreateCustomerRequest request, ICustomerService service, CancellationToken ct) =>
+            {
+                var created = await service.CreateAsync(request, ct);
+                return Results.CreatedAtRoute("GetCustomerById", new { id = created.Id }, created);
+            });
+        }
     }
 }
