@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
 import HomePage from "./pages/HomePage";
+import ActivityDetailsPage from "./pages/ActivityDetailsPage";
 
 // Laddas först när någon går till sidan
 const CalendarPage = lazy(() => import("./pages/CalendarPage"));
@@ -18,6 +19,7 @@ function App() {
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/customers" element={<CustomersPage />} />
             <Route path="/locations" element={<LocationsPage />} />
+            <Route path="/activities/:id" element={<ActivityDetailsPage />} />
           </Route>
         </Routes>
       </Suspense>

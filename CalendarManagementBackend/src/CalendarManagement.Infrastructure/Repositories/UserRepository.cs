@@ -14,15 +14,16 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<List<User>> GetAllAsync()
+    public async Task<List<User>> GetAllAsync(
+        CancellationToken ct = default)
     {
         return await _context.Users
             .AsNoTracking()
             .OrderBy(user => user.Name)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<User> AddAsync(User user)
+    public async Task<User> AddAsync(User user, CancellationToken ct = default)
     {
         _context.Users.Add(user);
 
@@ -30,8 +31,8 @@ public class UserRepository : IUserRepository
 
         return user;
     }
-    public async Task<User?> GetByIdAsync(int id)
+    public async Task<User?> GetByIdAsync(int id, CancellationToken ct = default)
     {
-        return await _context.Users.FindAsync(id);
+        return await _context.Users.FindAsync([id], ct);
     }
 }

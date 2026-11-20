@@ -6,10 +6,7 @@ type Activity = {
   date: string;
   type: string;
   responsiblePersonId: number | null;
-  responsiblePerson: {
-    id: number;
-    name: string;
-  } | null;
+  responsiblePersonName: string | null;
 };
 
 function ActivityDetailsPage() {
@@ -93,7 +90,7 @@ function ActivityDetailsPage() {
           </p>
           <p>
   <strong>Ansvarig person:</strong>{" "}
-  {activity.responsiblePerson?.name ?? "Ingen tilldelad"}
+  {activity.responsiblePersonName ?? "Ingen tilldelad"}
 </p>
         </div>
       </div>
