@@ -77,41 +77,6 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("CalendarManagement.Domain.Entities.Exempel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Exempel");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2026, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Första exemplet"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2026, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Andra exemplet"
-                        });
-                });
-
             modelBuilder.Entity("CalendarManagement.Domain.Entities.Location", b =>
                 {
                     b.Property<int>("Id")
