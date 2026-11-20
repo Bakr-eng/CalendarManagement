@@ -71,10 +71,15 @@ useEffect(() => {
     setError("");
 
     try {
-      await createActivity({
-        date: `${date}T00:00:00`,
-        type,
-      });
+      
+await createActivity({
+  date: `${date}T00:00:00`,
+  type,
+  responsiblePersonId: selectedUserId
+    ? Number(selectedUserId)
+    : null,
+});
+
 
       onCreated?.();
     } catch {

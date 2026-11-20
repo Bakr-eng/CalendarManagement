@@ -48,7 +48,8 @@ public static class ActivityEndpoints
 
         group.MapPost("/", async (
             CreateActivityDto dto,
-            IActivityRepository repository) =>
+            IActivityRepository repository,
+             IUserRepository userRepository) =>
         {
             if (!dto.Date.HasValue)
             {
@@ -68,10 +69,26 @@ public static class ActivityEndpoints
                 return Results.BadRequest("Invalid activity type.");
             }
 
+            if (dto.ResponsiblePersonId.HasValue)
+            {
+                var user = await userRepository.GetByIdAsync(
+                    dto.ResponsiblePersonId.Value
+                );
+
+                if (user == null)
+                {
+                    return Results.BadRequest(
+                        "Selected responsible person does not exist."
+                    );
+                }
+            }
+
+
             var activity = new Activity
             {
                 Date = dto.Date.Value,
-                Type = activityType
+                Type = activityType,
+                ResponsiblePersonId = dto.ResponsiblePersonId
             };
 
             var createdActivity =

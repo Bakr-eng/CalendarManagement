@@ -3,7 +3,9 @@ export interface Activity {
   id: number;
   date: string;
   type: string;
+  responsiblePersonId: number | null;
 }
+export type CreateActivityDto = Omit<Activity, "id">;
 
 export async function getActivities(): Promise<Activity[]> {
   const response = await fetch("/api/activities");
