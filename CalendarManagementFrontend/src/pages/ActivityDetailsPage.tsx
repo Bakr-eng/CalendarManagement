@@ -93,7 +93,7 @@ function ActivityDetailsPage() {
           </p>
           <p>
   <strong>Ansvarig person:</strong>{" "}
-  {activity.responsiblePerson?.name ?? "Ingen tilldelad"}
+  {activity.responsiblePersonName ?? "Ingen tilldelad"}
 </p>
         </div>
       </div>
