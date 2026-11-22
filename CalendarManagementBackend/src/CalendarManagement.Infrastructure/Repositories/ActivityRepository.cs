@@ -1,33 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CalendarManagement.Application.Interfaces;
+﻿using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Domain.Entities;
 using CalendarManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalendarManagement.Infrastructure.Repositories;
-public class ActivityRepository : IActivityRepository
+public class ActivityRepository(CalendarDbContext db) : IActivityRepository
 {
-    private readonly CalendarDbContext _context;
-
-    public ActivityRepository(CalendarDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<List<Activity>> GetAllAsync(
         CancellationToken ct = default)
     {
-        return await _context.Activities
+        return await db.Activities
             .Include(a => a.ResponsiblePerson)
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(ct);
     }
     public async Task<Activity?> GetByIdAsync(int id,
         CancellationToken ct = default)
     {
-        return await _context.Activities
+        return await db.Activities
             .Include(a => a.ResponsiblePerson)
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
@@ -36,9 +26,9 @@ public class ActivityRepository : IActivityRepository
         Activity activity,
         CancellationToken ct = default)
     {
-        _context.Activities.Add(activity);
+        db.Activities.Add(activity);
 
-        await _context.SaveChangesAsync();
+        await db.SaveChangesAsync(ct);
 
         return activity;
     }
