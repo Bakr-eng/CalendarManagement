@@ -5,19 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CalendarManagement.Infrastructure.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(CalendarDbContext db) : IUserRepository
 {
-    private readonly CalendarDbContext _context;
-
-    public UserRepository(CalendarDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<List<User>> GetAllAsync(
         CancellationToken ct = default)
     {
-        return await _context.Users
+        return await db.Users
             .AsNoTracking()
             .OrderBy(user => user.Name)
             .ToListAsync(ct);
@@ -25,14 +18,14 @@ public class UserRepository : IUserRepository
 
     public async Task<User> AddAsync(User user, CancellationToken ct = default)
     {
-        _context.Users.Add(user);
+        db.Users.Add(user);
 
-        await _context.SaveChangesAsync();
+        await db.SaveChangesAsync(ct);
 
         return user;
     }
     public async Task<User?> GetByIdAsync(int id, CancellationToken ct = default)
     {
-        return await _context.Users.FindAsync([id], ct);
+        return await db.Users.FindAsync([id], ct);
     }
 }
