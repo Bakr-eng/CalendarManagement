@@ -12,6 +12,6 @@ public interface IActivityService
         CancellationToken ct = default);
 
     Task<ActivityDto> CreateAsync(
-        CreateActivityDto request,
+        CreateActivityRequest request,
         CancellationToken ct = default);
 }

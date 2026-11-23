@@ -1,5 +1,4 @@
-﻿
-using CalendarManagement.Application.DTOs;
+﻿using CalendarManagement.Application.DTOs;
 using CalendarManagement.Application.Exceptions;
 using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Domain.Entities;
@@ -39,14 +38,14 @@ public class ActivityService(
     }
 
     public async Task<ActivityDto> CreateAsync(
-        CreateActivityDto request,
+        CreateActivityRequest request,
         CancellationToken ct = default)
     {
         var errors = new Dictionary<string, string[]>();
 
         if (!request.Date.HasValue)
         {
-            errors["date"] = ["Date is required."];
+            errors["date"] = ["Datum måste anges."];
         }
 
         var activityType = AllowedTypes.FirstOrDefault(
@@ -58,7 +57,7 @@ public class ActivityService(
 
         if (activityType is null)
         {
-            errors["type"] = ["Invalid activity type."];
+            errors["type"] = ["Ogiltig aktivitetstyp."];
         }
 
         if (request.ResponsiblePersonId.HasValue)
@@ -69,7 +68,7 @@ public class ActivityService(
             if (user is null)
             {
                 errors["responsiblePersonId"] =
-                    ["Selected user does not exist."];
+                    ["Den valda personen finns inte."];
             }
         }
 
