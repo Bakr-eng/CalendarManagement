@@ -1,5 +1,4 @@
-﻿
-using CalendarManagement.Application.DTOs;
+﻿using CalendarManagement.Application.DTOs;
 using CalendarManagement.Application.Interfaces;
 
 namespace CalendarManagement.API.Endpoints;
@@ -35,7 +34,7 @@ public static class ActivityEndpoints
         .WithName("GetActivityById");
 
         group.MapPost("/", async (
-            CreateActivityDto request,
+            CreateActivityRequest request,
             IActivityService service,
             CancellationToken ct) =>
         {
