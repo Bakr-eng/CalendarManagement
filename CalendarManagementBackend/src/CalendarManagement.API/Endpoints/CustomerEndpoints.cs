@@ -23,6 +23,18 @@ namespace CalendarManagement.API.Endpoints
                 var created = await service.CreateAsync(request, ct);
                 return Results.CreatedAtRoute("GetCustomerById", new { id = created.Id }, created);
             });
+
+            group.MapPut("/{id:int}", async (int id, UpdateCustomerRequest request, ICustomerService service, CancellationToken ct) =>
+            {
+                var updated = await service.UpdateAsync(id, request, ct);
+                return updated is null ? Results.NotFound() : Results.Ok(updated);
+            });
+
+            group.MapDelete("/{id:int}", async (int id, ICustomerService service, CancellationToken ct) =>
+            {
+                var deleted = await service.DeleteAsync(id, ct);
+                return deleted ? Results.NoContent() : Results.NotFound();
+            });
         }
     }
 }

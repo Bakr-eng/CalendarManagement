@@ -1,5 +1,4 @@
-﻿
-namespace CalendarManagement.Application.DTOs;
+﻿namespace CalendarManagement.Application.DTOs;
 
 public record CreateLocationRequest(
     string Name,

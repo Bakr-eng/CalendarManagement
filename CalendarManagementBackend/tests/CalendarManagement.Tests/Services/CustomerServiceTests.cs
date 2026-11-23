@@ -185,4 +185,108 @@ public class CustomerServiceTests
             Times.Never);
     }
 
+
+
+    // ---------- UpdateAsync ----------
+
+    [Fact]
+    public async Task UpdateAsync_WhenCustomerExists_UpdatesFieldsAndReturnsDto()
+    {
+        // Arrange
+        var createdAt = new DateTime(2026, 11, 1);
+        var existing = new Customer
+        {
+            Id = 3,
+            Name = "Gammalt namn",
+            ContactPerson = "Gammal kontakt",
+            CreatedAt = createdAt
+        };
+        var request = new UpdateCustomerRequest("  Nytt namn AB  ", " Bertil ", "bertil@nytt.se", null);
+        Customer? updatedCustomer = null;
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(3, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existing);
+
+        _repositoryMock
+            .Setup(r => r.UpdateAsync(It.IsAny<Customer>(), It.IsAny<CancellationToken>()))
+            .Callback<Customer, CancellationToken>((customer, _) => updatedCustomer = customer)
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _service.UpdateAsync(3, request);
+
+        // Assert – det som returneras
+        Assert.NotNull(result);
+        Assert.Equal(3, result.Id);
+        Assert.Equal("Nytt namn AB", result.Name);
+        Assert.Equal("Bertil", result.ContactPerson);
+        Assert.Equal("bertil@nytt.se", result.Email);
+        Assert.Null(result.Phone);
+
+        // Assert – det som skickades till repositoryn
+        Assert.NotNull(updatedCustomer);
+        Assert.Equal("Nytt namn AB", updatedCustomer.Name);
+        Assert.Equal(createdAt, updatedCustomer.CreatedAt); // får inte ändras
+
+        _repositoryMock.Verify(
+            r => r.UpdateAsync(It.IsAny<Customer>(), It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WhenCustomerDoesNotExist_ReturnsNullAndDoesNotUpdate()
+    {
+        // Arrange
+        var request = new UpdateCustomerRequest("Nytt namn", null, null, null);
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Customer?)null);
+
+        // Act
+        var result = await _service.UpdateAsync(999, request);
+
+        // Assert
+        Assert.Null(result);
+
+        _repositoryMock.Verify(
+            r => r.UpdateAsync(It.IsAny<Customer>(), It.IsAny<CancellationToken>()),
+            Times.Never);
+    }
+
+   
+
+    // ---------- DeleteAsync ----------
+
+    [Fact]
+    public async Task DeleteAsync_WhenCustomerExists_ReturnsTrue()
+    {
+        // Arrange
+        _repositoryMock
+            .Setup(r => r.DeleteAsync(5, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+        // Act
+        var result = await _service.DeleteAsync(5);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_WhenCustomerDoesNotExist_ReturnsFalse()
+    {
+        // Arrange
+        _repositoryMock
+            .Setup(r => r.DeleteAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
+
+        // Act
+        var result = await _service.DeleteAsync(999);
+
+        // Assert
+        Assert.False(result);
+    }
+
 }   
