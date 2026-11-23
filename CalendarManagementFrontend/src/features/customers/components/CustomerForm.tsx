@@ -1,5 +1,6 @@
 import { useState, type SubmitEvent } from "react";
 import type { CreateCustomerRequest } from "../types/customer";
+import "./CustomerForm.css";
 
 interface CustomerFormProps {
   onSubmit: (request: CreateCustomerRequest) => Promise<void>;
@@ -42,34 +43,58 @@ export function CustomerForm({ onSubmit }: CustomerFormProps) {
       setIsSaving(false);
     }
   }
-
+  
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="customer-form">
       <h2>Ny kund</h2>
 
-      <label>
-        Namn *
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
+      <div className="customer-field">
+        <label htmlFor="customer-name">
+          Namn <span className="customer-required">*</span>
+        </label>
+        <input
+          id="customer-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
 
-      <label>
-        Kontaktperson
-        <input value={contactPerson} onChange={(e) => setContactPerson(e.target.value)} />
-      </label>
+      <div className="customer-field">
+        <label htmlFor="customer-contact">Kontaktperson</label>
+        <input
+          id="customer-contact"
+          value={contactPerson}
+          onChange={(e) => setContactPerson(e.target.value)}
+        />
+      </div>
 
-      <label>
-        E-post
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </label>
+      <div className="customer-field">
+        <label htmlFor="customer-email">E-post</label>
+        <input
+          id="customer-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
 
-      <label>
-        Telefon
-        <input value={phone} onChange={(e) => setPhone(e.target.value)} />
-      </label>
+      <div className="customer-field">
+        <label htmlFor="customer-phone">Telefon</label>
+        <input
+          id="customer-phone"
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+      </div>
 
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p className="customer-error" role="alert">
+          {error}
+        </p>
+      )}
 
-      <button type="submit" disabled={isSaving}>
+      <button type="submit" className="customer-submit" disabled={isSaving}>
         {isSaving ? "Sparar..." : "Spara kund"}
       </button>
     </form>
