@@ -1,5 +1,6 @@
 import { useState, type SubmitEvent } from "react";
 import type { CreateLocationRequest } from "../types/location";
+import "./LocationForm.css";
 
 interface LocationFormProps {
   onSubmit: (request: CreateLocationRequest) => Promise<void>;
@@ -39,29 +40,48 @@ export function LocationForm({ onSubmit }: LocationFormProps) {
       setIsSaving(false);
     }
   }
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="location-form">
       <h2>Ny plats</h2>
 
-      <label>
-        Namn *
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
+      <div className="location-field">
+        <label htmlFor="location-name">
+          Namn <span className="location-required">*</span>
+        </label>
+        <input
+          id="location-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
 
-      <label>
-        Stad *
-        <input value={city} onChange={(e) => setCity(e.target.value)} />
-      </label>
+      <div className="location-field">
+        <label htmlFor="location-city">
+          Stad <span className="location-required">*</span>
+        </label>
+        <input
+          id="location-city"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+      </div>
 
-      <label>
-        Adress
-        <input value={address} onChange={(e) => setAddress(e.target.value)} />
-      </label>
+      <div className="location-field">
+        <label htmlFor="location-address">Adress</label>
+        <input
+          id="location-address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+      </div>
 
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p className="location-error" role="alert">
+          {error}
+        </p>
+      )}
 
-      <button type="submit" disabled={isSaving}>
+      <button type="submit" className="location-submit" disabled={isSaving}>
         {isSaving ? "Sparar..." : "Spara plats"}
       </button>
     </form>
