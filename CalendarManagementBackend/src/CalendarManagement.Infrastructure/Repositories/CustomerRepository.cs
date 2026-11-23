@@ -23,4 +23,19 @@ public class CustomerRepository(CalendarDbContext db) : ICustomerRepository
         db.Customers.Add(customer);
         await db.SaveChangesAsync(ct);
     }
+
+    public async Task UpdateAsync(Customer customer, CancellationToken ct = default)
+    {
+        db.Customers.Update(customer);
+        await db.SaveChangesAsync(ct);
+    }
+
+    public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
+    {
+        var deletedRows = await db.Customers
+            .Where(c => c.Id == id)
+            .ExecuteDeleteAsync(ct);
+
+        return deletedRows > 0;
+    }
 }
