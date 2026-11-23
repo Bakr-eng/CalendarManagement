@@ -135,5 +135,101 @@ namespace CalendarManagement.Tests.Services
 
 
 
+        // ---------- UpdateAsync ----------
+
+        [Fact]
+        public async Task UpdateAsync_ExistingLocation_UpdatesFieldsAndReturnsDto()
+        {
+            // Arrange
+            var existing = new Location { Id = 3, Name = "Gammalt namn", City = "Gammal stad" };
+            var request = new UpdateLocationRequest("  Avicii Arena  ", " Stockholm ", " Globentorget 2 ");
+            Location? updatedLocation = null;
+
+            _repositoryMock
+                .Setup(repo => repo.GetByIdAsync(3, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(existing);
+
+            _repositoryMock
+                .Setup(repo => repo.UpdateAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()))
+                .Callback<Location, CancellationToken>((location, _) => updatedLocation = location)
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _service.UpdateAsync(3, request);
+
+            // Assert – det som returneras
+            Assert.NotNull(result);
+            Assert.Equal(3, result.Id);
+            Assert.Equal("Avicii Arena", result.Name);
+            Assert.Equal("Stockholm", result.City);
+            Assert.Equal("Globentorget 2", result.Address);
+
+            // Assert – det som skickades till repositoryn
+            Assert.NotNull(updatedLocation);
+            Assert.Equal("Avicii Arena", updatedLocation.Name);
+
+            _repositoryMock.Verify(
+                repo => repo.UpdateAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_NonExistingLocation_ReturnsNullAndDoesNotUpdate()
+        {
+            // Arrange
+            var request = new UpdateLocationRequest("Avicii Arena", "Stockholm", null);
+
+            _repositoryMock
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((Location?)null);
+
+            // Act
+            var result = await _service.UpdateAsync(999, request);
+
+            // Assert
+            Assert.Null(result);
+
+            _repositoryMock.Verify(
+                repo => repo.UpdateAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()),
+                Times.Never);
+        }
+
+       
+
+       
+
+        // ---------- DeleteAsync ----------
+
+        [Fact]
+        public async Task DeleteAsync_ExistingLocation_ReturnsTrue()
+        {
+            // Arrange
+            _repositoryMock
+                .Setup(repo => repo.DeleteAsync(5, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _service.DeleteAsync(5);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_NonExistingLocation_ReturnsFalse()
+        {
+            // Arrange
+            _repositoryMock
+                .Setup(repo => repo.DeleteAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
+
+            // Act
+            var result = await _service.DeleteAsync(999);
+
+            // Assert
+            Assert.False(result);
+        }
+
+
     }
 }

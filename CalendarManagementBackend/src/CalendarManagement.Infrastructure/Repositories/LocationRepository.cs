@@ -29,5 +29,20 @@ namespace CalendarManagement.Infrastructure.Repositories
             db.Locations.Add(location);
             await db.SaveChangesAsync(ct);
         }
+
+        public async Task UpdateAsync(Location location, CancellationToken ct = default)
+        {
+            db.Locations.Update(location);
+            await db.SaveChangesAsync(ct);
+        }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
+        {
+            var deletedRows = await db.Locations
+                .Where(l => l.Id == id)
+                .ExecuteDeleteAsync(ct);
+
+            return deletedRows > 0;
+        }
     }
 }
