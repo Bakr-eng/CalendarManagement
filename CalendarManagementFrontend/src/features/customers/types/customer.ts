@@ -13,3 +13,6 @@ export interface CreateCustomerRequest {
   email?: string;
   phone?: string;
 }
+
+// Samma fält som när man skapar en kund
+export type UpdateCustomerRequest = CreateCustomerRequest;

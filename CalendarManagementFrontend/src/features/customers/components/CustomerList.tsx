@@ -3,9 +3,11 @@ import "../../../styles/table.css";
 
 interface CustomerListProps {
   customers: Customer[];
+  onEdit: (customer: Customer) => void;
+  onDelete: (customer: Customer) => void;
 }
 
-export function CustomerList({ customers }: CustomerListProps) {
+export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps) {
   if (customers.length === 0) {
     return <p>Inga kunder ännu.</p>;
   }
@@ -19,6 +21,7 @@ export function CustomerList({ customers }: CustomerListProps) {
             <th>Kontaktperson</th>
             <th>E-post</th>
             <th>Telefon</th>
+            <th className="table-actions-header">Åtgärder</th>
           </tr>
         </thead>
         <tbody>
@@ -33,6 +36,26 @@ export function CustomerList({ customers }: CustomerListProps) {
               </td>
               <td className={customer.phone ? undefined : "cell-empty"}>
                 {customer.phone ?? "–"}
+              </td>
+              <td>
+                <div className="table-actions">
+                  <button
+                    type="button"
+                    className="table-button"
+                    onClick={() => onEdit(customer)}
+                    aria-label={`Redigera ${customer.name}`}
+                  >
+                    Redigera
+                  </button>
+                  <button
+                    type="button"
+                    className="table-button table-button-danger"
+                    onClick={() => onDelete(customer)}
+                    aria-label={`Ta bort ${customer.name}`}
+                  >
+                    Ta bort
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
