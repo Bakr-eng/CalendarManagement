@@ -1,7 +1,10 @@
-//Hämtar och håller kunderna------------
 import { useEffect, useState } from "react";
-import { createCustomer, getCustomers } from "../api/customersApi";
-import type { Customer, CreateCustomerRequest } from "../types/customer";
+import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from "../api/customersApi";
+import type { Customer, CreateCustomerRequest, UpdateCustomerRequest } from "../types/customer";
+
+function sortByName(list: Customer[]): Customer[] {
+  return [...list].sort((a, b) => a.name.localeCompare(b.name, "sv"));
+}
 
 export function useCustomers() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -18,7 +21,7 @@ export function useCustomers() {
       .catch((err: unknown) => {
         if (!ignore) setError(err instanceof Error ? err.message : "Något gick fel");
       })
-      .finally(() => { //körs alltid, oavsett om det gick bra eller fel
+      .finally(() => {
         if (!ignore) setIsLoading(false);
       });
 
@@ -29,10 +32,18 @@ export function useCustomers() {
 
   async function addCustomer(request: CreateCustomerRequest) {
     const created = await createCustomer(request);
-    setCustomers((prev) =>
-      [...prev, created].sort((a, b) => a.name.localeCompare(b.name, "sv"))
-    );
+    setCustomers((prev) => sortByName([...prev, created]));
   }
 
-  return { customers, isLoading, error, addCustomer };
+  async function editCustomer(id: number, request: UpdateCustomerRequest) {
+    const updated = await updateCustomer(id, request);
+    setCustomers((prev) => sortByName(prev.map((c) => (c.id === id ? updated : c))));
+  }
+
+  async function removeCustomer(id: number) {
+    await deleteCustomer(id);
+    setCustomers((prev) => prev.filter((c) => c.id !== id));
+  }
+
+  return { customers, isLoading, error, addCustomer, editCustomer, removeCustomer };
 }

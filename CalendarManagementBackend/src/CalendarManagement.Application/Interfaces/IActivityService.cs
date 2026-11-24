@@ -5,6 +5,7 @@ namespace CalendarManagement.Application.Interfaces;
 public interface IActivityService
 {
     Task<List<ActivityDto>> GetAllAsync(
+        ActivityFilter filter,
         CancellationToken ct = default);
 
     Task<ActivityDto?> GetByIdAsync(
@@ -12,6 +13,6 @@ public interface IActivityService
         CancellationToken ct = default);
 
     Task<ActivityDto> CreateAsync(
-        CreateActivityDto request,
+        CreateActivityRequest request,
         CancellationToken ct = default);
 }

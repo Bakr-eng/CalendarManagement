@@ -1,19 +1,24 @@
 import { useState, type SubmitEvent } from "react";
-import type { CreateCustomerRequest } from "../types/customer";
+import type { CreateCustomerRequest, Customer } from "../types/customer";
+import "./CustomerForm.css";
 
 interface CustomerFormProps {
   onSubmit: (request: CreateCustomerRequest) => Promise<void>;
+  initialCustomer?: Customer; // finns = redigera, saknas = ny kund
+  onCancel?: () => void;
 }
 
-export function CustomerForm({ onSubmit }: CustomerFormProps) {
-  const [name, setName] = useState("");
-  const [contactPerson, setContactPerson] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+export function CustomerForm({ onSubmit, initialCustomer, onCancel }: CustomerFormProps) {
+  const isEditing = initialCustomer !== undefined;
+
+  const [name, setName] = useState(initialCustomer?.name ?? "");
+  const [contactPerson, setContactPerson] = useState(initialCustomer?.contactPerson ?? "");
+  const [email, setEmail] = useState(initialCustomer?.email ?? "");
+  const [phone, setPhone] = useState(initialCustomer?.phone ?? "");
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!name.trim()) {
@@ -32,10 +37,14 @@ export function CustomerForm({ onSubmit }: CustomerFormProps) {
         phone: phone || undefined,
       });
 
-      setName("");
-      setContactPerson("");
-      setEmail("");
-      setPhone("");
+      // Töm bara fälten när man skapar en ny kund.
+      // Vid redigering stänger sidan formuläret istället.
+      if (!isEditing) {
+        setName("");
+        setContactPerson("");
+        setEmail("");
+        setPhone("");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Något gick fel");
     } finally {
@@ -44,34 +53,66 @@ export function CustomerForm({ onSubmit }: CustomerFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Ny kund</h2>
+    <form onSubmit={handleSubmit} className="customer-form">
+      <h2>{isEditing ? "Redigera kund" : "Ny kund"}</h2>
 
-      <label>
-        Namn *
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
+      <div className="customer-field">
+        <label htmlFor="customer-name">
+          Namn <span className="customer-required">*</span>
+        </label>
+        <input
+          id="customer-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
 
-      <label>
-        Kontaktperson
-        <input value={contactPerson} onChange={(e) => setContactPerson(e.target.value)} />
-      </label>
+      <div className="customer-field">
+        <label htmlFor="customer-contact">Kontaktperson</label>
+        <input
+          id="customer-contact"
+          value={contactPerson}
+          onChange={(e) => setContactPerson(e.target.value)}
+        />
+      </div>
 
-      <label>
-        E-post
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </label>
+      <div className="customer-field">
+        <label htmlFor="customer-email">E-post</label>
+        <input
+          id="customer-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
 
-      <label>
-        Telefon
-        <input value={phone} onChange={(e) => setPhone(e.target.value)} />
-      </label>
+      <div className="customer-field">
+        <label htmlFor="customer-phone">Telefon</label>
+        <input
+          id="customer-phone"
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+      </div>
 
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p className="customer-error" role="alert">
+          {error}
+        </p>
+      )}
 
-      <button type="submit" disabled={isSaving}>
-        {isSaving ? "Sparar..." : "Spara kund"}
-      </button>
+      <div className="customer-actions">
+        <button type="submit" className="customer-submit" disabled={isSaving}>
+          {isSaving ? "Sparar..." : isEditing ? "Spara ändringar" : "Spara kund"}
+        </button>
+
+        {onCancel && (
+          <button type="button" className="customer-cancel" onClick={onCancel}>
+            Avbryt
+          </button>
+        )}
+      </div>
     </form>
   );
 }
