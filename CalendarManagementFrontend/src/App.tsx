@@ -1,3 +1,4 @@
+
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
@@ -14,13 +15,19 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<p>Laddar...</p>}>
         <Routes>
+          {/* Vanliga sidor med huvudmenyn */}
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/customers" element={<CustomersPage />} />
             <Route path="/locations" element={<LocationsPage />} />
-            <Route path="/activities/:id" element={<ActivityDetailsPage />} />
           </Route>
+
+          {/* Aktivitetssida med egen sidomeny */}
+          <Route
+            path="/activities/:id"
+            element={<ActivityDetailsPage />}
+          />
         </Routes>
       </Suspense>
     </BrowserRouter>

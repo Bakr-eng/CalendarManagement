@@ -1,0 +1,222 @@
+
+/* Övre navigering */
+
+.activity-topbar {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 24px;
+  box-sizing: border-box;
+
+  background-color: #1d1e24;
+  border-bottom: 1px solid #333;
+}
+
+.activity-topbar a.activity-back,
+.activity-topbar a.activity-back:visited {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 11px 18px;
+  background-color: #d9aa1c;
+  color: #111;
+
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+
+  transition: background-color 0.15s ease;
+}
+
+.activity-topbar a.activity-back:hover {
+  background-color: #f0c43c;
+}
+
+
+/* Sidans layout */
+
+.activity-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 0;
+
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  align-items: start;
+}
+
+
+/* Vänstermeny */
+
+.activity-sidebar {
+  position: sticky;
+  top: 0;
+
+  width: 100%;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  padding: 28px 16px;
+
+  background-color: #1d1e24;
+  border: none;
+  border-right: 1px solid #333;
+  border-radius: 0;
+}
+
+.activity-sidebar h2 {
+  margin: 0 0 24px;
+  padding: 0 12px;
+
+  color: #d9aa1c;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.activity-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.activity-nav-item {
+  width: 100%;
+  padding: 13px 15px;
+
+  background: transparent;
+  color: #e5e5e5;
+
+  border: none;
+  border-radius: 8px;
+
+  text-align: left;
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.activity-nav-item:hover {
+  background-color: #303139;
+}
+
+.activity-nav-item.active {
+  background-color: #d9aa1c;
+  color: #111;
+  font-weight: 600;
+}
+
+.activity-nav-item.active:hover {
+  background-color: #e9bb2b;
+}
+
+.activity-nav-item:focus-visible {
+  outline: 2px solid #d9aa1c;
+  outline-offset: 2px;
+}
+
+
+/* Huvudinnehåll */
+
+.activity-main {
+  width: 100%;
+  max-width: 960px;
+  min-width: 0;
+
+  margin: 0 auto;
+  padding: 24px 28px 64px;
+  box-sizing: border-box;
+}
+
+
+/* Tomma sektioner som utvecklas senare */
+
+.activity-placeholder {
+  min-height: 350px;
+  padding: 40px;
+
+  background-color: #120606;
+  border: 1px solid #292323;
+  border-radius: 12px;
+
+  text-align: center;
+  color: white;
+}
+
+.activity-placeholder h1 {
+  margin: 0 0 20px;
+  color: #d9aa1c;
+  font-size: 28px;
+}
+
+.activity-placeholder p {
+  color: #aaa;
+  font-size: 15px;
+}
+
+
+/* Mobilanpassning */
+
+@media (max-width: 800px) {
+  .activity-topbar {
+    height: 60px;
+    padding: 0 16px;
+  }
+
+  .activity-layout {
+    grid-template-columns: 1fr;
+    min-height: calc(100vh - 60px);
+  }
+
+  .activity-sidebar {
+    position: static;
+
+    width: 100%;
+    height: auto;
+    overflow: visible;
+
+    padding: 16px;
+    border-right: none;
+    border-bottom: 1px solid #333;
+  }
+
+  .activity-sidebar h2 {
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+
+  .activity-sidebar nav {
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .activity-nav-item {
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
+    padding: 10px 14px;
+  }
+
+  .activity-main {
+    max-width: 100%;
+    padding: 16px 12px 40px;
+  }
+
+  .activity-placeholder {
+    padding: 24px 16px;
+    min-height: 250px;
+  }
+}
