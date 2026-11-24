@@ -54,39 +54,25 @@
 }
 
 
-/* ---------- Knappar i tabellen (Redigera / Ta bort) ---------- */
+/* ---------- Klickbara rader ---------- */
 
-.table-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.table-button {
-  padding: 6px 12px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text-h);
-  font: inherit;
-  font-size: 14px;
+.clickable-row {
   cursor: pointer;
 }
 
-.table-button:hover {
-  background: var(--border);
+/* Namnet är en knapp, så att man kan öppna raden med tangentbordet (Tab + Enter) */
+.row-button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
-.table-button-danger {
-  color: #dc2626;
-  border-color: #dc2626;
-}
-
-.table-button-danger:hover {
-  background: #dc2626;
-  color: #fff;
-}
-
-.data-table .table-actions-header {
-  text-align: right;
+.row-button:focus-visible {
+  outline: 2px solid #ee6a2c;
+  outline-offset: 4px;
+  border-radius: 2px;
 }

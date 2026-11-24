@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Modal } from "../components/ui/Modal";
+import { CustomerDetails } from "../features/customers/components/CustomerDetails";
 import { CustomerForm } from "../features/customers/components/CustomerForm";
 import { CustomerList } from "../features/customers/components/CustomerList";
 import { useCustomers } from "../features/customers/hooks/useCustomers";
@@ -6,8 +8,24 @@ import type { Customer } from "../features/customers/types/customer";
 
 function CustomersPage() {
   const { customers, isLoading, error, addCustomer, editCustomer, removeCustomer } = useCustomers();
-  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
-  const [actionError, setActionError] = useState<string | null>(null);
+
+  // Kunden som visas i rutan, eller null om rutan är stängd
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  // false = visa detaljer, true = visa formuläret för att uppdatera
+  const [isEditing, setIsEditing] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  function openDetails(customer: Customer) {
+    setSelectedCustomer(customer);
+    setIsEditing(false);
+    setDeleteError(null);
+  }
+
+  function closeModal() {
+    setSelectedCustomer(null);
+    setIsEditing(false);
+    setDeleteError(null);
+  }
 
   async function handleDelete(customer: Customer) {
     const confirmed = window.confirm(`Vill du ta bort ${customer.name}?`);
@@ -15,17 +33,11 @@ function CustomersPage() {
       return;
     }
 
-    setActionError(null);
-
     try {
       await removeCustomer(customer.id);
-
-      // Om kunden som togs bort höll på att redigeras – stäng formuläret
-      if (editingCustomer?.id === customer.id) {
-        setEditingCustomer(null);
-      }
+      closeModal();
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Något gick fel");
+      setDeleteError(err instanceof Error ? err.message : "Något gick fel");
     }
   }
 
@@ -33,33 +45,42 @@ function CustomersPage() {
     <div>
       <h1>Kunder</h1>
 
-      {editingCustomer ? (
-        <CustomerForm
-          key={editingCustomer.id}
-          initialCustomer={editingCustomer}
-          onSubmit={async (request) => {
-            await editCustomer(editingCustomer.id, request);
-            setEditingCustomer(null);
-          }}
-          onCancel={() => setEditingCustomer(null)}
-        />
-      ) : (
-        <CustomerForm onSubmit={addCustomer} />
-      )}
-
-      {actionError && <p role="alert">{actionError}</p>}
+      <CustomerForm onSubmit={addCustomer} />
 
       {isLoading && <p>Laddar kunder...</p>}
       {error && <p role="alert">{error}</p>}
       {!isLoading && !error && (
-        <CustomerList
-          customers={customers}
-          onEdit={(customer) => {
-            setActionError(null);
-            setEditingCustomer(customer);
-          }}
-          onDelete={handleDelete}
-        />
+        <CustomerList customers={customers} onSelect={openDetails} />
+      )}
+
+      {selectedCustomer && (
+        <Modal
+          title={isEditing ? "Uppdatera kund" : selectedCustomer.name}
+          onClose={closeModal}
+        >
+          {deleteError && (
+            <p className="modal-error" role="alert">
+              {deleteError}
+            </p>
+          )}
+
+          {isEditing ? (
+            <CustomerForm
+              initialCustomer={selectedCustomer}
+              onSubmit={async (request) => {
+                await editCustomer(selectedCustomer.id, request);
+                closeModal();
+              }}
+              onCancel={() => setIsEditing(false)}
+            />
+          ) : (
+            <CustomerDetails
+              customer={selectedCustomer}
+              onEdit={() => setIsEditing(true)}
+              onDelete={() => handleDelete(selectedCustomer)}
+            />
+          )}
+        </Modal>
       )}
     </div>
   );

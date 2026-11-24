@@ -3,11 +3,10 @@ import "../../../styles/table.css";
 
 interface CustomerListProps {
   customers: Customer[];
-  onEdit: (customer: Customer) => void;
-  onDelete: (customer: Customer) => void;
+  onSelect: (customer: Customer) => void;
 }
 
-export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps) {
+export function CustomerList({ customers, onSelect }: CustomerListProps) {
   if (customers.length === 0) {
     return <p>Inga kunder ännu.</p>;
   }
@@ -21,13 +20,16 @@ export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps)
             <th>Kontaktperson</th>
             <th>E-post</th>
             <th>Telefon</th>
-            <th className="table-actions-header">Åtgärder</th>
           </tr>
         </thead>
         <tbody>
           {customers.map((customer) => (
-            <tr key={customer.id}>
-              <td>{customer.name}</td>
+            <tr key={customer.id} className="clickable-row" onClick={() => onSelect(customer)}>
+              <td>
+                <button type="button" className="row-button">
+                  {customer.name}
+                </button>
+              </td>
               <td className={customer.contactPerson ? undefined : "cell-empty"}>
                 {customer.contactPerson ?? "–"}
               </td>
@@ -36,26 +38,6 @@ export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps)
               </td>
               <td className={customer.phone ? undefined : "cell-empty"}>
                 {customer.phone ?? "–"}
-              </td>
-              <td>
-                <div className="table-actions">
-                  <button
-                    type="button"
-                    className="table-button"
-                    onClick={() => onEdit(customer)}
-                    aria-label={`Redigera ${customer.name}`}
-                  >
-                    Redigera
-                  </button>
-                  <button
-                    type="button"
-                    className="table-button table-button-danger"
-                    onClick={() => onDelete(customer)}
-                    aria-label={`Ta bort ${customer.name}`}
-                  >
-                    Ta bort
-                  </button>
-                </div>
               </td>
             </tr>
           ))}

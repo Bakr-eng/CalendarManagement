@@ -3,11 +3,10 @@ import "../../../styles/table.css";
 
 interface LocationListProps {
   locations: Location[];
-  onEdit: (location: Location) => void;
-  onDelete: (location: Location) => void;
+  onSelect: (location: Location) => void;
 }
 
-export function LocationList({ locations, onEdit, onDelete }: LocationListProps) {
+export function LocationList({ locations, onSelect }: LocationListProps) {
   if (locations.length === 0) {
     return <p>Inga platser ännu.</p>;
   }
@@ -20,36 +19,19 @@ export function LocationList({ locations, onEdit, onDelete }: LocationListProps)
             <th>Namn</th>
             <th>Stad</th>
             <th>Adress</th>
-            <th className="table-actions-header">Åtgärder</th>
           </tr>
         </thead>
         <tbody>
           {locations.map((location) => (
-            <tr key={location.id}>
-              <td>{location.name}</td>
+            <tr key={location.id} className="clickable-row" onClick={() => onSelect(location)}>
+              <td>
+                <button type="button" className="row-button">
+                  {location.name}
+                </button>
+              </td>
               <td>{location.city}</td>
               <td className={location.address ? undefined : "cell-empty"}>
                 {location.address ?? "–"}
-              </td>
-              <td>
-                <div className="table-actions">
-                  <button
-                    type="button"
-                    className="table-button"
-                    onClick={() => onEdit(location)}
-                    aria-label={`Redigera ${location.name}`}
-                  >
-                    Redigera
-                  </button>
-                  <button
-                    type="button"
-                    className="table-button table-button-danger"
-                    onClick={() => onDelete(location)}
-                    aria-label={`Ta bort ${location.name}`}
-                  >
-                    Ta bort
-                  </button>
-                </div>
               </td>
             </tr>
           ))}
