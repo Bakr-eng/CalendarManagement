@@ -1,20 +1,24 @@
 import { useState, type SubmitEvent } from "react";
-import type { CreateCustomerRequest } from "../types/customer";
+import type { CreateCustomerRequest, Customer } from "../types/customer";
 import "./CustomerForm.css";
 
 interface CustomerFormProps {
   onSubmit: (request: CreateCustomerRequest) => Promise<void>;
+  initialCustomer?: Customer; // finns = redigera, saknas = ny kund
+  onCancel?: () => void;
 }
 
-export function CustomerForm({ onSubmit }: CustomerFormProps) {
-  const [name, setName] = useState("");
-  const [contactPerson, setContactPerson] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+export function CustomerForm({ onSubmit, initialCustomer, onCancel }: CustomerFormProps) {
+  const isEditing = initialCustomer !== undefined;
+
+  const [name, setName] = useState(initialCustomer?.name ?? "");
+  const [contactPerson, setContactPerson] = useState(initialCustomer?.contactPerson ?? "");
+  const [email, setEmail] = useState(initialCustomer?.email ?? "");
+  const [phone, setPhone] = useState(initialCustomer?.phone ?? "");
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!name.trim()) {
@@ -33,20 +37,24 @@ export function CustomerForm({ onSubmit }: CustomerFormProps) {
         phone: phone || undefined,
       });
 
-      setName("");
-      setContactPerson("");
-      setEmail("");
-      setPhone("");
+      // Töm bara fälten när man skapar en ny kund.
+      // Vid redigering stänger sidan formuläret istället.
+      if (!isEditing) {
+        setName("");
+        setContactPerson("");
+        setEmail("");
+        setPhone("");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Något gick fel");
     } finally {
       setIsSaving(false);
     }
   }
-  
+
   return (
     <form onSubmit={handleSubmit} className="customer-form">
-      <h2>Ny kund</h2>
+      <h2>{isEditing ? "Redigera kund" : "Ny kund"}</h2>
 
       <div className="customer-field">
         <label htmlFor="customer-name">
@@ -94,9 +102,17 @@ export function CustomerForm({ onSubmit }: CustomerFormProps) {
         </p>
       )}
 
-      <button type="submit" className="customer-submit" disabled={isSaving}>
-        {isSaving ? "Sparar..." : "Spara kund"}
-      </button>
+      <div className="customer-actions">
+        <button type="submit" className="customer-submit" disabled={isSaving}>
+          {isSaving ? "Sparar..." : isEditing ? "Spara ändringar" : "Spara kund"}
+        </button>
+
+        {onCancel && (
+          <button type="button" className="customer-cancel" onClick={onCancel}>
+            Avbryt
+          </button>
+        )}
+      </div>
     </form>
   );
 }

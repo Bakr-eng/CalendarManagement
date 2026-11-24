@@ -3,9 +3,10 @@ import "../../../styles/table.css";
 
 interface CustomerListProps {
   customers: Customer[];
+  onSelect: (customer: Customer) => void;
 }
 
-export function CustomerList({ customers }: CustomerListProps) {
+export function CustomerList({ customers, onSelect }: CustomerListProps) {
   if (customers.length === 0) {
     return <p>Inga kunder ännu.</p>;
   }
@@ -23,8 +24,12 @@ export function CustomerList({ customers }: CustomerListProps) {
         </thead>
         <tbody>
           {customers.map((customer) => (
-            <tr key={customer.id}>
-              <td>{customer.name}</td>
+            <tr key={customer.id} className="clickable-row" onClick={() => onSelect(customer)}>
+              <td>
+                <button type="button" className="row-button">
+                  {customer.name}
+                </button>
+              </td>
               <td className={customer.contactPerson ? undefined : "cell-empty"}>
                 {customer.contactPerson ?? "–"}
               </td>

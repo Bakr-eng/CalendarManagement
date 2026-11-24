@@ -21,7 +21,7 @@ namespace CalendarManagement.Application.Services
 
         public async Task<LocationDto> CreateAsync(CreateLocationRequest request, CancellationToken ct = default)
         {
-            Validate(request.Name, request.City);
+            Validate(request.Name, request.City, request.Address);
 
             var location = new Location
             {
@@ -36,7 +36,7 @@ namespace CalendarManagement.Application.Services
 
         public async Task<LocationDto?> UpdateAsync(int id, UpdateLocationRequest request, CancellationToken ct = default)
         {
-            Validate(request.Name, request.City);
+            Validate(request.Name, request.City, request.Address);
 
             var location = await repository.GetByIdAsync(id, ct);
             if (location is null)
@@ -55,7 +55,7 @@ namespace CalendarManagement.Application.Services
         public Task<bool> DeleteAsync(int id, CancellationToken ct = default) =>
             repository.DeleteAsync(id, ct);
 
-        private static void Validate(string? name, string? city)
+        private static void Validate(string? name, string? city, string? address)
         {
             var errors = new Dictionary<string, string[]>();
 
@@ -69,9 +69,22 @@ namespace CalendarManagement.Application.Services
                 errors["city"] = ["Stad måste fyllas i."];
             }
 
+            CheckMaxLength(errors, "name", name, Location.NameMaxLength, "Namn");
+            CheckMaxLength(errors, "city", city, Location.CityMaxLength, "Stad");
+            CheckMaxLength(errors, "address", address, Location.AddressMaxLength, "Adress");
+
             if (errors.Count > 0)
             {
                 throw new RequestValidationException(errors);
+            }
+        }
+
+        private static void CheckMaxLength(
+            Dictionary<string, string[]> errors, string field, string? value, int maxLength, string label)
+        {
+            if (value is not null && value.Trim().Length > maxLength)
+            {
+                errors[field] = [$"{label} får vara högst {maxLength} tecken."];
             }
         }
 

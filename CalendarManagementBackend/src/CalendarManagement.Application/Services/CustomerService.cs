@@ -21,7 +21,7 @@ namespace CalendarManagement.Application.Services
 
         public async Task<CustomerDto> CreateAsync(CreateCustomerRequest request, CancellationToken ct = default)
         {
-            Validate(request.Name);
+            Validate(request.Name, request.ContactPerson, request.Email, request.Phone);
 
             var customer = new Customer
             {
@@ -38,7 +38,7 @@ namespace CalendarManagement.Application.Services
 
         public async Task<CustomerDto?> UpdateAsync(int id, UpdateCustomerRequest request, CancellationToken ct = default)
         {
-            Validate(request.Name);
+            Validate(request.Name, request.ContactPerson, request.Email, request.Phone);
 
             var customer = await repository.GetByIdAsync(id, ct);
             if (customer is null)
@@ -59,7 +59,7 @@ namespace CalendarManagement.Application.Services
         public Task<bool> DeleteAsync(int id, CancellationToken ct = default) =>
             repository.DeleteAsync(id, ct);
 
-        private static void Validate(string? name)
+        private static void Validate(string? name, string? contactPerson, string? email, string? phone)
         {
             var errors = new Dictionary<string, string[]>();
 
@@ -68,13 +68,27 @@ namespace CalendarManagement.Application.Services
                 errors["name"] = ["Namn måste fyllas i."];
             }
 
+            CheckMaxLength(errors, "name", name, Customer.NameMaxLength, "Namn");
+            CheckMaxLength(errors, "contactPerson", contactPerson, Customer.ContactPersonMaxLength, "Kontaktperson");
+            CheckMaxLength(errors, "email", email, Customer.EmailMaxLength, "E-post");
+            CheckMaxLength(errors, "phone", phone, Customer.PhoneMaxLength, "Telefon");
+
             if (errors.Count > 0)
             {
                 throw new RequestValidationException(errors);
             }
         }
 
-        private static CustomerDto ToDto(Customer c) =>
+        private static void CheckMaxLength(
+            Dictionary<string, string[]> errors, string field, string? value, int maxLength, string label)
+        {
+            if (value is not null && value.Trim().Length > maxLength)
+            {
+                errors[field] = [$"{label} får vara högst {maxLength} tecken."];
+            }
+        }
+
+        private static CustomerDto ToDto(Customer c) => 
             new(c.Id, c.Name, c.ContactPerson, c.Email, c.Phone);
     }
 }

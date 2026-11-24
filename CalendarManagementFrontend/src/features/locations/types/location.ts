@@ -12,3 +12,6 @@ export interface CreateLocationRequest {
   city: string;
   address?: string;
 }
+
+// Samma fält som när man skapar en plats
+export type UpdateLocationRequest = CreateLocationRequest;
