@@ -60,6 +60,35 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
                     b.ToTable("Activities");
                 });
 
+            modelBuilder.Entity("CalendarManagement.Domain.Entities.ChecklistItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Section")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("ChecklistItems");
+                });
+
             modelBuilder.Entity("CalendarManagement.Domain.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -160,6 +189,22 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
                     b.Navigation("Location");
 
                     b.Navigation("ResponsiblePerson");
+                });
+
+            modelBuilder.Entity("CalendarManagement.Domain.Entities.ChecklistItem", b =>
+                {
+                    b.HasOne("CalendarManagement.Domain.Entities.Activity", "Activity")
+                        .WithMany("ChecklistItems")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+                });
+
+            modelBuilder.Entity("CalendarManagement.Domain.Entities.Activity", b =>
+                {
+                    b.Navigation("ChecklistItems");
                 });
 #pragma warning restore 612, 618
         }

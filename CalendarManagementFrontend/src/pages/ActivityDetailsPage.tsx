@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import ChecklistSection from "../components/ChecklistSection";
 
 type Activity = {
   id: number;
@@ -112,6 +113,48 @@ function ActivityDetailsPage() {
               : "Ingen plats"}
           </p>
         </div>
+      </div>
+    
+      <div
+        style={{
+          backgroundColor: "#080000",
+          color: "#d8a80a",
+          padding: "24px",
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(236, 195, 13, 0.1)",
+        }}
+      >
+        <h2>Checklista</h2>
+
+        <ChecklistSection
+  title="Dagsschema"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Hotell"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Resa"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Teknik"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Kontakt"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Plats"
+  activityId={activity.id}
+/>
       </div>
     </div>
   );
