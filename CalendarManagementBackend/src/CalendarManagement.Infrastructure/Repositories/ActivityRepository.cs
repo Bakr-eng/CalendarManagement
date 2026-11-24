@@ -31,7 +31,7 @@ public class ActivityRepository(CalendarDbContext db) : IActivityRepository
             query = query.Where(a => a.ResponsiblePersonId == filter.ResponsiblePersonId);
         }
 
-        if (!string.IsNullOrWhiteSpace(filter.Search))
+        if (!string.IsNullOrWhiteSpace(filter.Search)) // Om sökfältet inte är tomt, filtrera på sökord
         {
             var search = filter.Search.Trim();
 
