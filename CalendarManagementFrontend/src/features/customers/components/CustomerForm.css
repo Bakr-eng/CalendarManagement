@@ -97,5 +97,6 @@
 }
 
 .customer-cancel:hover {
-  background: var(--border);
+  color: #dc2626;
+  border-color: #dc2626;
 }

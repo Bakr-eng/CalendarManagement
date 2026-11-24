@@ -1,4 +1,6 @@
-.modal {
+/* dialog.modal (inte bara .modal) är mer specifik och vinner därför alltid
+   över andra .modal-regler, t.ex. den i CalendarPage.css */
+dialog.modal {
   --modal-accent: #ee6a2c;
 
   width: calc(100% - 32px);
@@ -11,8 +13,13 @@
   text-align: left;
 }
 
-.modal::backdrop {
+dialog.modal::backdrop {
   background: rgba(0, 0, 0, 0.6);
+}
+
+/* Ta bort marginal som andra .modal-regler kan lägga på knappar */
+dialog.modal button {
+  margin-top: 0;
 }
 
 .modal-content {

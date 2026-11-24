@@ -3,7 +3,7 @@ import { getUsers, type User } from "../services/userService";
 import { createActivity } from "../services/activityService";
 import { CustomerSelect } from "../../customers/components/CustomerSelect";
 import { LocationSelect } from "../../locations/components/LocationSelect";
-import "./CreateActivityForm.css";
+import "./activities.css";
 
 type Props = {
   selectedDate?: string;

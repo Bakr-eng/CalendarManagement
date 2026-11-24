@@ -3,7 +3,7 @@ import { CustomerSelect } from "../../customers/components/CustomerSelect";
 import { LocationSelect } from "../../locations/components/LocationSelect";
 import type { ActivityFilter } from "../services/activityService";
 import { getUsers, type User } from "../services/userService";
-import "./ActivitySearch.css";
+import "./activities.css";
 
 interface ActivitySearchProps {
   filter: ActivityFilter;
