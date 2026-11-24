@@ -16,5 +16,8 @@ public class Activity
 
     public int? LocationId { get; set; }
     public Location? Location { get; set; } // Navigation property för related Location entity
+
+    public ICollection<ChecklistItem> ChecklistItems { get; set; }
+        = new List<ChecklistItem>();
 }
 
