@@ -1,5 +1,6 @@
+// ritar listan "2 aktiviteter" med datum, typ, plats och kund
 import { formatActivityDetails, type Activity } from "../services/activityService";
-import "./ActivitySearchResults.css";
+import "./activities.css";
 
 interface ActivitySearchResultsProps {
   activities: Activity[];
