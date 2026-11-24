@@ -1,0 +1,66 @@
+.activity-search {
+  --search-accent: #ee6a2c;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--code-bg);
+  text-align: left;
+}
+
+.activity-search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 160px;
+  min-width: 0;
+}
+
+/* Sökrutan får mer plats än rullistorna */
+.activity-search-text {
+  flex: 2 1 240px;
+}
+
+.activity-search-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.activity-search-field input,
+.activity-search-field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 15px;
+}
+
+.activity-search-field input:focus,
+.activity-search-field select:focus {
+  outline: 2px solid var(--search-accent);
+  outline-offset: 1px;
+}
+
+.activity-search-clear {
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  cursor: pointer;
+}
+
+.activity-search-clear:hover {
+  background: var(--border);
+}
