@@ -9,6 +9,7 @@ public class CalendarDbContext(DbContextOptions<CalendarDbContext> options) : Db
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Location> Locations => Set<Location>();
+    public DbSet<ChecklistItem> ChecklistItems => Set<ChecklistItem>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
