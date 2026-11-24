@@ -12,10 +12,11 @@ public static class ActivityEndpoints
             .WithTags("Activities");
 
         group.MapGet("/", async (
-            IActivityService service,
-            CancellationToken ct) =>
+      [AsParameters] ActivityFilter filter,
+      IActivityService service,
+      CancellationToken ct) =>
         {
-            var activities = await service.GetAllAsync(ct);
+            var activities = await service.GetAllAsync(filter, ct);
 
             return Results.Ok(activities);
         });

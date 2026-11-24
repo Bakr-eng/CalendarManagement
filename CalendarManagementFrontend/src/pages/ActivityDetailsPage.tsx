@@ -5,8 +5,14 @@ type Activity = {
   id: number;
   date: string;
   type: string;
+
   responsiblePersonId: number | null;
   responsiblePersonName: string | null;
+
+  customerName: string | null;
+
+  locationName: string | null;
+  locationCity: string | null;
 };
 
 function ActivityDetailsPage() {
@@ -47,27 +53,28 @@ function ActivityDetailsPage() {
         padding: "24px",
       }}
     >
-        <button
-  onClick={() => navigate("/calendar")}
-  style={{
-    marginBottom: "20px",
-    backgroundColor: "#d8a80a",
-    color: "#080000",
-    border: "none",
-    padding: "10px 18px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "bold",
-  }}
->
-  ← Tillbaka till kalendern
-</button>
-      <h1>Activitetsdetaljer</h1>
+      <button
+        onClick={() => navigate("/calendar")}
+        style={{
+          marginBottom: "20px",
+          backgroundColor: "#d8a80a",
+          color: "#080000",
+          border: "none",
+          padding: "10px 18px",
+          borderRadius: "8px",
+          cursor: "pointer",
+          fontWeight: "bold",
+        }}
+      >
+        ← Tillbaka till kalendern
+      </button>
+
+      <h1>Aktivitetsdetaljer</h1>
 
       <div
         style={{
           backgroundColor: "#080000",
-          color: "#d8a80a", 
+          color: "#d8a80a",
           padding: "24px",
           borderRadius: "12px",
           boxShadow: "0 4px 12px rgba(236, 195, 13, 0.1)",
@@ -82,16 +89,28 @@ function ActivityDetailsPage() {
 
           <p>
             <strong>Datum:</strong>{" "}
-            {new Date(activity.date).toLocaleDateString()}
+            {new Date(activity.date).toLocaleDateString("sv-SE")}
           </p>
 
           <p>
             <strong>Status:</strong> Planerad
           </p>
+
           <p>
-  <strong>Ansvarig person:</strong>{" "}
-  {activity.responsiblePersonName ?? "Ingen tilldelad"}
-</p>
+            <strong>Ansvarig person:</strong>{" "}
+            {activity.responsiblePersonName ?? "Ingen tilldelad"}
+          </p>
+
+          <p>
+            <strong>Kund:</strong> {activity.customerName ?? "Ingen kund"}
+          </p>
+
+          <p>
+            <strong>Plats:</strong>{" "}
+            {activity.locationName
+              ? `${activity.locationName}, ${activity.locationCity}`
+              : "Ingen plats"}
+          </p>
         </div>
       </div>
     </div>
