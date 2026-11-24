@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 type ChecklistSectionProps = {
   title: string;
 };
@@ -5,6 +7,16 @@ type ChecklistSectionProps = {
 export default function ChecklistSection({
   title,
 }: ChecklistSectionProps) {
+  const [items, setItems] = useState<string[]>([]);
+  const [newItem, setNewItem] = useState("");
+
+  const addItem = () => {
+    if (!newItem.trim()) return;
+
+    setItems([...items, newItem]);
+    setNewItem("");
+  };
+
   return (
     <div
       style={{
@@ -15,43 +27,63 @@ export default function ChecklistSection({
         border: "1px solid #333",
       }}
     >
+      <h3>{title}</h3>
+
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          gap: "10px",
           marginBottom: "16px",
         }}
       >
-        <h3>{title}</h3>
-
-        <span
+        <input
+          type="text"
+          value={newItem}
+          onChange={(e) => setNewItem(e.target.value)}
+          placeholder="Ny punkt..."
           style={{
-            backgroundColor: "#dc3545",
-            color: "white",
-            padding: "4px 10px",
-            borderRadius: "999px",
-            fontSize: "12px",
+            flex: 1,
+            padding: "10px",
+            borderRadius: "8px",
+            border: "1px solid #555",
+          }}
+        />
+
+        <button
+          onClick={addItem}
+          style={{
+            backgroundColor: "#d8a80a",
+            color: "#000",
+            border: "none",
+            padding: "10px 16px",
+            borderRadius: "8px",
+            cursor: "pointer",
             fontWeight: "bold",
           }}
         >
-          Ej påbörjad
-        </span>
+          Lägg till
+        </button>
       </div>
 
-      <button
+      <ul
         style={{
-          backgroundColor: "#d8a80a",
-          color: "#000",
-          border: "none",
-          padding: "8px 14px",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontWeight: "bold",
+          listStyle: "none",
+          padding: 0,
+          margin: 0,
         }}
       >
-        + Lägg till punkt
-      </button>
+        {items.map((item, index) => (
+          <li
+            key={index}
+            style={{
+              padding: "8px 0",
+              borderBottom: "1px solid #222",
+            }}
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
