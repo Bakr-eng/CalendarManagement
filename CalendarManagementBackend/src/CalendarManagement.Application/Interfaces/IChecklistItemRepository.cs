@@ -18,4 +18,9 @@ public interface IChecklistItemRepository
 
     Task SaveChangesAsync(
         CancellationToken ct = default);
+
+    Task UpdateCompletedAsync(
+    int id,
+    bool completed,
+    CancellationToken ct = default);
 }

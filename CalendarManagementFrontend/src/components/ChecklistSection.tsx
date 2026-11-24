@@ -17,12 +17,18 @@ export default function ChecklistSection({
 }: ChecklistSectionProps) {
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [newItem, setNewItem] = useState("");
-  useEffect(() => {
+useEffect(() => {
   fetch(`/api/checklists/activity/${activityId}`)
     .then((res) => res.json())
-    .then((data) => setItems(data))
+    .then((data) =>
+      setItems(
+        data.filter(
+          (item: any) => item.section === title
+        )
+      )
+    )
     .catch((error) => console.error(error));
-}, [activityId]);
+}, [activityId, title]);
 
   const addItem = async () => {
   if (!newItem.trim()) return;
@@ -46,15 +52,33 @@ export default function ChecklistSection({
   setNewItem("");
 };
 
-  const toggleItem = (id: number) => {
-    setItems(
-      items.map((item) =>
-        item.id === id
-          ? { ...item, completed: !item.completed }
-          : item
-      )
-    );
-  };
+  const toggleItem = async (id: number) => {
+  const item = items.find((x) => x.id === id);
+
+  if (!item) return;
+
+  const newCompletedValue = !item.completed;
+
+  const response = await fetch(
+  `/api/checklists/${id}/completed?completed=${newCompletedValue}`,
+  {
+    method: "PUT",
+  }
+);
+
+  if (!response.ok) {
+    console.error("Failed to update checklist item");
+    return;
+  }
+
+  setItems(
+    items.map((item) =>
+      item.id === id
+        ? { ...item, completed: newCompletedValue }
+        : item
+    )
+  );
+};
 
   const deleteItem = async (id: number) => {
     const response = await fetch(`/api/checklists/${id}`, {

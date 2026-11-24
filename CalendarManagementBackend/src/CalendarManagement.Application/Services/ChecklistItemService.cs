@@ -31,4 +31,13 @@ public class ChecklistItemService(
         await repository.DeleteAsync(id, ct);
         await repository.SaveChangesAsync(ct);
     }
+
+    public async Task UpdateCompletedAsync(
+        int id,
+        bool completed,
+        CancellationToken ct = default)
+    {
+        await repository.UpdateCompletedAsync(id, completed, ct);
+        await repository.SaveChangesAsync(ct);
+    }
 }

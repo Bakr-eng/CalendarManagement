@@ -42,13 +42,35 @@ public static class ChecklistItemEndpoints
             await service.AddAsync(item, ct);
 
             return Results.Ok(new
-{
-    item.Id,
-    item.ActivityId,
-    item.Section,
-    item.Text,
-    item.Completed
-});
+            {
+                item.Id,
+                item.ActivityId,
+                item.Section,
+                item.Text,
+                item.Completed
+            });
         });
+
+        group.MapDelete("/{id:int}", async (
+            int id,
+            IChecklistItemService service,
+            CancellationToken ct) =>
+        {
+            await service.DeleteAsync(id, ct);
+
+            return Results.NoContent();
+        });
+
+        group.MapPut("/{id:int}/completed", async (
+            int id,
+            bool completed,
+            IChecklistItemService service,
+            CancellationToken ct) =>
+        {
+            await service.UpdateCompletedAsync(id, completed, ct);
+
+            return Results.Ok();
+        });
+        
     }
 }

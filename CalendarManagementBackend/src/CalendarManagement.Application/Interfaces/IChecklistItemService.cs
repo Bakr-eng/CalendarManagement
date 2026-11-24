@@ -15,4 +15,9 @@ public interface IChecklistItemService
     Task DeleteAsync(
         int id,
         CancellationToken ct = default);
+
+    Task UpdateCompletedAsync(
+        int id,
+        bool completed,
+        CancellationToken ct = default);
 }

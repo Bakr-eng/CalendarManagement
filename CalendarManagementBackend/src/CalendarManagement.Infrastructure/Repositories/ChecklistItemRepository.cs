@@ -42,6 +42,19 @@ public class ChecklistItemRepository : IChecklistItemRepository
             _context.ChecklistItems.Remove(item);
         }
     }
+    public async Task UpdateCompletedAsync(
+    int id,
+    bool completed,
+    CancellationToken ct = default)
+{
+    var item = await _context.ChecklistItems
+        .FirstOrDefaultAsync(x => x.Id == id, ct);
+
+    if (item is not null)
+    {
+        item.Completed = completed;
+    }
+}
 
     public async Task SaveChangesAsync(
         CancellationToken ct = default)
