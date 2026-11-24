@@ -1,0 +1,18 @@
+using CalendarManagement.Domain.Entities;
+
+namespace CalendarManagement.Application.Interfaces;
+
+public interface IChecklistItemService
+{
+    Task<List<ChecklistItem>> GetByActivityIdAsync(
+        int activityId,
+        CancellationToken ct = default);
+
+    Task AddAsync(
+        ChecklistItem item,
+        CancellationToken ct = default);
+
+    Task DeleteAsync(
+        int id,
+        CancellationToken ct = default);
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type ChecklistItem = {
   id: number;
@@ -8,28 +8,43 @@ type ChecklistItem = {
 
 type ChecklistSectionProps = {
   title: string;
+  activityId: number;
 };
 
 export default function ChecklistSection({
   title,
+  activityId,
 }: ChecklistSectionProps) {
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [newItem, setNewItem] = useState("");
+  useEffect(() => {
+  fetch(`/api/checklists/activity/${activityId}`)
+    .then((res) => res.json())
+    .then((data) => setItems(data))
+    .catch((error) => console.error(error));
+}, [activityId]);
 
-  const addItem = () => {
-    if (!newItem.trim()) return;
+  const addItem = async () => {
+  if (!newItem.trim()) return;
 
-    setItems([
-      ...items,
-      {
-        id: Date.now(),
-        text: newItem,
-        completed: false,
-      },
-    ]);
+  const response = await fetch("/api/checklists", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      activityId,
+      section: title,
+      text: newItem,
+    }),
+  });
 
-    setNewItem("");
-  };
+  const createdItem = await response.json();
+
+  setItems([...items, createdItem]);
+
+  setNewItem("");
+};
 
   const toggleItem = (id: number) => {
     setItems(
@@ -41,7 +56,16 @@ export default function ChecklistSection({
     );
   };
 
-  const deleteItem = (id: number) => {
+  const deleteItem = async (id: number) => {
+    const response = await fetch(`/api/checklists/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      console.error("Failed to delete checklist item");
+      return;
+    }
+
     setItems(items.filter((item) => item.id !== id));
   };
 

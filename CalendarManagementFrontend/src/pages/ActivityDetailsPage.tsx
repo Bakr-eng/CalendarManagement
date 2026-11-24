@@ -126,12 +126,35 @@ function ActivityDetailsPage() {
       >
         <h2>Checklista</h2>
 
-        <ChecklistSection title="Dagsschema" />
-        <ChecklistSection title="Hotell" />
-        <ChecklistSection title="Resa" />
-        <ChecklistSection title="Teknik" />
-        <ChecklistSection title="Kontakt" />
-        <ChecklistSection title="Plats" />
+        <ChecklistSection
+  title="Dagsschema"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Hotell"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Resa"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Teknik"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Kontakt"
+  activityId={activity.id}
+/>
+
+<ChecklistSection
+  title="Plats"
+  activityId={activity.id}
+/>
       </div>
     </div>
   );

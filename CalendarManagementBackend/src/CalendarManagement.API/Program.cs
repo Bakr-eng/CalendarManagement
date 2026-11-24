@@ -33,6 +33,10 @@ builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 
+// Checklist Items
+builder.Services.AddScoped<IChecklistItemRepository, ChecklistItemRepository>();
+builder.Services.AddScoped<IChecklistItemService, ChecklistItemService>();
+
 var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? [];
@@ -67,5 +71,6 @@ app.MapActivityEndpoints();
 app.MapCustomerEndpoints();
 app.MapLocationEndpoints();
 app.MapUserEndpoints();
+app.MapChecklistItemEndpoints();
 
 app.Run();
