@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ChecklistSection from "../components/ChecklistSection";
+import ActivityDetailsLayout from "../features/activities/components/ActivityDetailsLayout";
 
 type Activity = {
   id: number;
@@ -19,7 +20,6 @@ type Activity = {
 function ActivityDetailsPage() {
   const { id } = useParams();
   const [activity, setActivity] = useState<Activity | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`/api/activities/${id}`)
@@ -47,28 +47,13 @@ function ActivityDetailsPage() {
   }
 
   return (
-    <div
-      style={{
-        maxWidth: "800px",
-        margin: "40px auto",
-        padding: "24px",
-      }}
-    >
-      <button
-        onClick={() => navigate("/calendar")}
+    <ActivityDetailsLayout>
+      <div
         style={{
-          marginBottom: "20px",
-          backgroundColor: "#d8a80a",
-          color: "#080000",
-          border: "none",
-          padding: "10px 18px",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontWeight: "bold",
+          margin: "0px auto",
+          padding: "24px",
         }}
-      >
-        ← Tillbaka till kalendern
-      </button>
+    >
 
       <h1>Aktivitetsdetaljer</h1>
 
@@ -157,6 +142,7 @@ function ActivityDetailsPage() {
 />
       </div>
     </div>
+    </ActivityDetailsLayout>
   );
 }
 
