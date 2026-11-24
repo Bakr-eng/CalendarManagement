@@ -30,8 +30,14 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ResponsiblePersonId")
                         .HasColumnType("int");
@@ -42,6 +48,12 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("Date");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("ResponsiblePersonId");
 
@@ -129,9 +141,23 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CalendarManagement.Domain.Entities.Activity", b =>
                 {
+                    b.HasOne("CalendarManagement.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("CalendarManagement.Domain.Entities.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("CalendarManagement.Domain.Entities.User", "ResponsiblePerson")
                         .WithMany()
                         .HasForeignKey("ResponsiblePersonId");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Location");
 
                     b.Navigation("ResponsiblePerson");
                 });
