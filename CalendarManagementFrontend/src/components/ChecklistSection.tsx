@@ -4,6 +4,7 @@ type ChecklistItem = {
   id: number;
   text: string;
   completed: boolean;
+  section: string;
 };
 
 type ChecklistSectionProps = {
@@ -23,8 +24,8 @@ useEffect(() => {
     .then((data) =>
       setItems(
         data.filter(
-          (item: any) => item.section === title
-        )
+         (item: ChecklistItem) => item.section === title
+)
       )
     )
     .catch((error) => console.error(error));
