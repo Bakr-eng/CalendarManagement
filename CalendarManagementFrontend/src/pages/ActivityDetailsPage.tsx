@@ -69,37 +69,25 @@ function ActivityDetailsPage() {
         <h2>Aktivitet #{activity.id}</h2>
 
         <div style={{ marginTop: "20px" }}>
-          <p>
-            <strong>Typ:</strong> {activity.type}
-          </p>
+          <p> <strong>Typ:</strong> {activity.type} </p>
 
-          <p>
-            <strong>Datum:</strong>{" "}
-            {new Date(activity.date).toLocaleDateString("sv-SE")}
-          </p>
+          <p> <strong>Datum:</strong>{" "}
+            {new Date(activity.date).toLocaleDateString("sv-SE")} </p>
 
-          <p>
-            <strong>Status:</strong> Planerad
-          </p>
+          <p> <strong>Status:</strong> Planerad </p>
 
-          <p>
-            <strong>Ansvarig person:</strong>{" "}
-            {activity.responsiblePersonName ?? "Ingen tilldelad"}
-          </p>
+          <p> <strong>Ansvarig person:</strong>{" "}
+            {activity.responsiblePersonName ?? "Ingen tilldelad"} </p>
 
-          <p>
-            <strong>Kund:</strong> {activity.customerName ?? "Ingen kund"}
-          </p>
+          <p> <strong>Kund:</strong> {activity.customerName ?? "Ingen kund"} </p>
 
-          <p>
-            <strong>Plats:</strong>{" "}
+          <p> <strong>Plats:</strong>{" "}
             {activity.locationName
               ? `${activity.locationName}, ${activity.locationCity}`
-              : "Ingen plats"}
-          </p>
+              : "Ingen plats"} </p>
+              
         </div>
       </div>
-    
       <div
         style={{
           backgroundColor: "#080000",
@@ -107,43 +95,19 @@ function ActivityDetailsPage() {
           padding: "24px",
           borderRadius: "12px",
           boxShadow: "0 4px 12px rgba(236, 195, 13, 0.1)",
-        }}
-      >
+        }}>
         <h2>Checklista</h2>
 
-        <ChecklistSection
-  title="Dagsschema"
-  activityId={activity.id}
-/>
+        <ChecklistSection title="Dagsschema" activityId={activity.id} />
+        <ChecklistSection title="Hotell" activityId={activity.id} />
+        <ChecklistSection title="Resa" activityId={activity.id} />
+        <ChecklistSection title="Teknik" activityId={activity.id} />
+        <ChecklistSection title="Kontakt" activityId={activity.id} />
+        <ChecklistSection title="Plats" activityId={activity.id} />
 
-<ChecklistSection
-  title="Hotell"
-  activityId={activity.id}
-/>
-
-<ChecklistSection
-  title="Resa"
-  activityId={activity.id}
-/>
-
-<ChecklistSection
-  title="Teknik"
-  activityId={activity.id}
-/>
-
-<ChecklistSection
-  title="Kontakt"
-  activityId={activity.id}
-/>
-
-<ChecklistSection
-  title="Plats"
-  activityId={activity.id}
-/>
       </div>
     </div>
     </ActivityDetailsLayout>
   );
 }
-
 export default ActivityDetailsPage;
