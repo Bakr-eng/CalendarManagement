@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/form.css";
 import { Modal } from "../components/ui/Modal";
 import { CustomerDetails } from "../features/customers/components/CustomerDetails";
 import { CustomerForm } from "../features/customers/components/CustomerForm";
@@ -14,6 +15,8 @@ function CustomersPage() {
   // false = visa detaljer, true = visa formuläret för att uppdatera
   const [isEditing, setIsEditing] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  // true = rutan för att lägga till visas
+  const [isCreating, setIsCreating] = useState(false);
 
   function openDetails(customer: Customer) {
     setSelectedCustomer(customer);
@@ -43,14 +46,29 @@ function CustomersPage() {
 
   return (
     <div>
-      <h1>Kunder</h1>
-
-      <CustomerForm onSubmit={addCustomer} />
+      <div className="page-header">
+        <h1>Kunder</h1>
+        <button type="button" className="page-add-button" onClick={() => setIsCreating(true)}>
+          + Lägg till kund
+        </button>
+      </div>
 
       {isLoading && <p>Laddar kunder...</p>}
       {error && <p role="alert">{error}</p>}
       {!isLoading && !error && (
         <CustomerList customers={customers} onSelect={openDetails} />
+      )}
+
+      {isCreating && (
+        <Modal title="Ny kund" onClose={() => setIsCreating(false)}>
+          <CustomerForm
+            onSubmit={async (request) => {
+              await addCustomer(request);
+              setIsCreating(false);
+            }}
+            onCancel={() => setIsCreating(false)}
+          />
+        </Modal>
       )}
 
       {selectedCustomer && (

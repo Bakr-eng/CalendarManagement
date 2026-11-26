@@ -158,11 +158,10 @@ const overallStatus = getOverallStatus();
             <strong>Plats:</strong>{" "}
             {activity.locationName
               ? `${activity.locationName}, ${activity.locationCity}`
-              : "Ingen plats"}
-          </p>
+              : "Ingen plats"} </p>
+              
         </div>
       </div>
-    
       <div
         style={{
           backgroundColor: "#080000",
@@ -215,5 +214,4 @@ const overallStatus = getOverallStatus();
     </ActivityDetailsLayout>
   );
 }
-
 export default ActivityDetailsPage;
