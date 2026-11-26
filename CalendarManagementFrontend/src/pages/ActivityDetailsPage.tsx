@@ -21,16 +21,58 @@ function ActivityDetailsPage() {
   const { id } = useParams();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [sectionStatuses, setSectionStatuses] =
-  useState<Record<string, string>>({});
+  useState<
+    Record<
+      string,
+      {
+        status: string;
+        itemCount: number;
+      }
+    >
+  >({});
   const handleStatusChange = (
   section: string,
-  status: string
+  status: string,
+  itemCount: number
 ) => {
   setSectionStatuses(prev => ({
-    ...prev,
-    [section]: status,
-  }));
+  ...prev,
+  [section]: {
+    status,
+    itemCount,
+  },
+}));
 };
+const getOverallStatus = () => {
+  const activeSections = Object.values(sectionStatuses)
+    .filter(section => section.itemCount > 0);
+
+  const statuses = activeSections.map(
+    section => section.status
+  );
+
+  if (statuses.length === 0) {
+    return "NotStarted";
+  }
+
+  if (statuses.every(status => status === "Complete")) {
+    return "Complete";
+  }
+
+  if (
+    statuses.some(
+      status =>
+        status === "InProgress" ||
+        status === "Complete"
+    )
+  ) {
+    return "InProgress";
+  }
+
+  return "NotStarted";
+};
+
+const overallStatus = getOverallStatus();
 
 
   useEffect(() => {
@@ -93,7 +135,7 @@ function ActivityDetailsPage() {
           </p>
 
           <p>
-            <strong>Status:</strong> Planerad
+            <strong>Status:</strong> {overallStatus}
           </p>
 
           <p>
@@ -123,9 +165,7 @@ function ActivityDetailsPage() {
           boxShadow: "0 4px 12px rgba(236, 195, 13, 0.1)",
         }}
       >
-        <pre>
-  {JSON.stringify(sectionStatuses, null, 2)}
-</pre>
+  
         <h2>Checklista</h2>
 
         <ChecklistSection

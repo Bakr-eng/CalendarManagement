@@ -13,9 +13,10 @@ type ChecklistSectionProps = {
   title: string;
   activityId: number;
   onStatusChange?: (
-    section: string,
-    status: string
-  ) => void;
+  section: string,
+  status: string,
+  itemCount: number
+) => void;
 };
 
 export default function ChecklistSection({
@@ -116,7 +117,8 @@ useEffect(() => {
 useEffect(() => {
   onStatusChange?.(
     title,
-    status.status
+    status.status,
+    items.length
   );
 }, [title, status.status, onStatusChange]);
 
