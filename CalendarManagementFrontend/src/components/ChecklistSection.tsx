@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { getChecklistStatus }
+from "../features/activities/services/checklistStatus";
 
 type ChecklistItem = {
   id: number;
@@ -100,28 +102,12 @@ useEffect(() => {
 
   const progressText = `${completedCount}/${items.length}`;
 
-  const getStatus = () => {
-    if (items.length === 0) {
-      return {
-        text: "Ej påbörjad",
-        color: "#dc3545",
-      };
-    }
+  
 
-    if (completedCount === items.length) {
-      return {
-        text: "Klar",
-        color: "#28a745",
-      };
-    }
-
-    return {
-      text: "Pågående",
-      color: "#ffc107",
-    };
-  };
-
-  const status = getStatus();
+  const status = getChecklistStatus(
+  items.length,
+  completedCount
+);
 
   return (
     <div
