@@ -12,11 +12,16 @@ type ChecklistItem = {
 type ChecklistSectionProps = {
   title: string;
   activityId: number;
+  onStatusChange?: (
+    section: string,
+    status: string
+  ) => void;
 };
 
 export default function ChecklistSection({
   title,
   activityId,
+  onStatusChange,
 }: ChecklistSectionProps) {
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [newItem, setNewItem] = useState("");
@@ -108,6 +113,12 @@ useEffect(() => {
   items.length,
   completedCount
 );
+useEffect(() => {
+  onStatusChange?.(
+    title,
+    status.status
+  );
+}, [title, status.status, onStatusChange]);
 
   return (
     <div

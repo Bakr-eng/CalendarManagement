@@ -25,16 +25,27 @@ const sections: { id: Section; label: string }[] = [
 
 type Props = {
   children: ReactNode;
+  sectionStatuses: Record<string, string>;
 };
 
-export default function ActivityDetailsLayout({ children }: Props) {
+export default function ActivityDetailsLayout({ children, sectionStatuses }: Props) {
   const [activeSection, setActiveSection] =
     useState<Section>("overview");
 
   const selected = sections.find(
     section => section.id === activeSection
   );
-
+ 
+  const getStatusIcon = (status?: string) => {
+  switch (status) {
+    case "Complete":
+      return "🟢";
+    case "InProgress":
+      return "🟠";
+    default:
+      return "🔴";
+  }
+};
   return (
   <>
     <header className="activity-topbar">
@@ -59,7 +70,22 @@ export default function ActivityDetailsLayout({ children }: Props) {
               }
               onClick={() => setActiveSection(section.id)}
             >
-              {section.label}
+              {
+  getStatusIcon(
+    section.label === "Hotell"
+      ? sectionStatuses["Hotell"]
+      : section.label === "Dagschema"
+      ? sectionStatuses["Dagsschema"]
+      : section.label === "Resa"
+      ? sectionStatuses["Resa"]
+      : section.label === "Teknik"
+      ? sectionStatuses["Teknik"]
+      : section.label === "Kontakt"
+      ? sectionStatuses["Kontakt"]
+      : undefined
+  )
+}{" "}
+{section.label}
             </button>
           ))}
         </nav>

@@ -20,6 +20,18 @@ type Activity = {
 function ActivityDetailsPage() {
   const { id } = useParams();
   const [activity, setActivity] = useState<Activity | null>(null);
+  const [sectionStatuses, setSectionStatuses] =
+  useState<Record<string, string>>({});
+  const handleStatusChange = (
+  section: string,
+  status: string
+) => {
+  setSectionStatuses(prev => ({
+    ...prev,
+    [section]: status,
+  }));
+};
+
 
   useEffect(() => {
     fetch(`/api/activities/${id}`)
@@ -47,7 +59,9 @@ function ActivityDetailsPage() {
   }
 
   return (
-    <ActivityDetailsLayout>
+    <ActivityDetailsLayout
+    sectionStatuses={sectionStatuses}
+    >
       <div
         style={{
           margin: "0px auto",
@@ -109,36 +123,45 @@ function ActivityDetailsPage() {
           boxShadow: "0 4px 12px rgba(236, 195, 13, 0.1)",
         }}
       >
+        <pre>
+  {JSON.stringify(sectionStatuses, null, 2)}
+</pre>
         <h2>Checklista</h2>
 
         <ChecklistSection
   title="Dagsschema"
   activityId={activity.id}
+  onStatusChange={handleStatusChange}
 />
 
 <ChecklistSection
   title="Hotell"
   activityId={activity.id}
+  onStatusChange={handleStatusChange}
 />
 
 <ChecklistSection
   title="Resa"
   activityId={activity.id}
+  onStatusChange={handleStatusChange}
 />
 
 <ChecklistSection
   title="Teknik"
   activityId={activity.id}
+  onStatusChange={handleStatusChange}
 />
 
 <ChecklistSection
   title="Kontakt"
   activityId={activity.id}
+  onStatusChange={handleStatusChange}
 />
 
 <ChecklistSection
   title="Plats"
   activityId={activity.id}
+  onStatusChange={handleStatusChange}
 />
       </div>
     </div>
