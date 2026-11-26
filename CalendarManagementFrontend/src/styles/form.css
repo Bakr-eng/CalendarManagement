@@ -1,0 +1,157 @@
+/* 
+   Gemensam stil för formulär (kunder, platser ...)
+   Använd klasserna: form, form-field, form-required,
+   form-error, form-actions, form-submit, form-cancel
+*/
+
+.form {
+  --form-accent: #ee6a2c;
+  --form-danger: #dc2626;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 480px;
+  margin: 24px auto;
+  padding: 24px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--code-bg);
+  text-align: left;
+}
+
+.form h2 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--text-h);
+}
+
+/* ---------- Ett fält: etikett ovanför input ---------- */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: 2px solid var(--form-accent);
+  outline-offset: 1px;
+  border-color: var(--form-accent);
+}
+
+/* Stjärnan på obligatoriska fält */
+.form-required {
+  color: var(--form-accent);
+}
+
+.form-error {
+  margin: 0;
+  color: var(--form-danger);
+  font-size: 14px;
+}
+
+/* ---------- Knappar ---------- */
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.form-submit {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: var(--form-accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-submit:hover {
+  filter: brightness(1.1);
+}
+
+.form-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-cancel {
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  cursor: pointer;
+}
+
+.form-cancel:hover {
+  color: var(--form-danger);
+  border-color: var(--form-danger);
+}
+
+
+
+
+/* ---------- Sidhuvud på listsidor: rubrik + "Lägg till"-knapp ----------  Customer & location*/
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 900px;
+  margin: 24px auto 0;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.page-add-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #ee6a2c;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.page-add-button:hover {
+  filter: brightness(1.1);
+}
+
+.page-add-button:focus-visible {
+  outline: 2px solid #ee6a2c;
+  outline-offset: 2px;
+}

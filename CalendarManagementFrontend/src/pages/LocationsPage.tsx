@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/form.css";
 import { Modal } from "../components/ui/Modal";
 import { LocationDetails } from "../features/locations/components/LocationDetails";
 import { LocationForm } from "../features/locations/components/LocationForm";
@@ -14,6 +15,8 @@ function LocationsPage() {
   // false = visa detaljer, true = visa formuläret för att uppdatera
   const [isEditing, setIsEditing] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  // true = rutan för att lägga till visas
+  const [isCreating, setIsCreating] = useState(false);
 
   function openDetails(location: Location) {
     setSelectedLocation(location);
@@ -43,14 +46,29 @@ function LocationsPage() {
 
   return (
     <div>
-      <h1>Platser</h1>
-
-      <LocationForm onSubmit={addLocation} />
+      <div className="page-header">
+        <h1>Platser</h1>
+        <button type="button" className="page-add-button" onClick={() => setIsCreating(true)}>
+          + Lägg till plats
+        </button>
+      </div>
 
       {isLoading && <p>Laddar platser...</p>}
       {error && <p role="alert">{error}</p>}
       {!isLoading && !error && (
         <LocationList locations={locations} onSelect={openDetails} />
+      )}
+
+      {isCreating && (
+        <Modal title="Ny plats" onClose={() => setIsCreating(false)}>
+          <LocationForm
+            onSubmit={async (request) => {
+              await addLocation(request);
+              setIsCreating(false);
+            }}
+            onCancel={() => setIsCreating(false)}
+          />
+        </Modal>
       )}
 
       {selectedLocation && (
