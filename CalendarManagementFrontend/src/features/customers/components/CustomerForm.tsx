@@ -1,6 +1,6 @@
 import { useState, type SubmitEvent } from "react";
 import type { CreateCustomerRequest, Customer } from "../types/customer";
-import "./CustomerForm.css";
+import "../../../styles/form.css";
 
 interface CustomerFormProps {
   onSubmit: (request: CreateCustomerRequest) => Promise<void>;
@@ -53,12 +53,12 @@ export function CustomerForm({ onSubmit, initialCustomer, onCancel }: CustomerFo
   }
 
   return (
-    <form onSubmit={handleSubmit} className="customer-form">
+    <form onSubmit={handleSubmit} className="form">
       <h2>{isEditing ? "Redigera kund" : "Ny kund"}</h2>
 
-      <div className="customer-field">
+      <div className="form-field">
         <label htmlFor="customer-name">
-          Namn <span className="customer-required">*</span>
+          Namn <span className="form-required">*</span>
         </label>
         <input
           id="customer-name"
@@ -67,7 +67,7 @@ export function CustomerForm({ onSubmit, initialCustomer, onCancel }: CustomerFo
         />
       </div>
 
-      <div className="customer-field">
+      <div className="form-field">
         <label htmlFor="customer-contact">Kontaktperson</label>
         <input
           id="customer-contact"
@@ -76,7 +76,7 @@ export function CustomerForm({ onSubmit, initialCustomer, onCancel }: CustomerFo
         />
       </div>
 
-      <div className="customer-field">
+      <div className="form-field">
         <label htmlFor="customer-email">E-post</label>
         <input
           id="customer-email"
@@ -86,7 +86,7 @@ export function CustomerForm({ onSubmit, initialCustomer, onCancel }: CustomerFo
         />
       </div>
 
-      <div className="customer-field">
+      <div className="form-field">
         <label htmlFor="customer-phone">Telefon</label>
         <input
           id="customer-phone"
@@ -97,18 +97,18 @@ export function CustomerForm({ onSubmit, initialCustomer, onCancel }: CustomerFo
       </div>
 
       {error && (
-        <p className="customer-error" role="alert">
+        <p className="form-error" role="alert">
           {error}
         </p>
       )}
 
-      <div className="customer-actions">
-        <button type="submit" className="customer-submit" disabled={isSaving}>
+      <div className="form-actions">
+        <button type="submit" className="form-submit" disabled={isSaving}>
           {isSaving ? "Sparar..." : isEditing ? "Spara ändringar" : "Spara kund"}
         </button>
 
         {onCancel && (
-          <button type="button" className="customer-cancel" onClick={onCancel}>
+          <button type="button" className="form-cancel" onClick={onCancel}>
             Avbryt
           </button>
         )}

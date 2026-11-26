@@ -1,6 +1,6 @@
 import { useState, type SubmitEvent } from "react";
 import type { CreateLocationRequest, Location } from "../types/location";
-import "./LocationForm.css";
+import "../../../styles/form.css";
 
 interface LocationFormProps {
   onSubmit: (request: CreateLocationRequest) => Promise<void>;
@@ -50,12 +50,12 @@ export function LocationForm({ onSubmit, initialLocation, onCancel }: LocationFo
   }
 
   return (
-    <form onSubmit={handleSubmit} className="location-form">
+    <form onSubmit={handleSubmit} className="form">
       <h2>{isEditing ? "Redigera plats" : "Ny plats"}</h2>
 
-      <div className="location-field">
+      <div className="form-field">
         <label htmlFor="location-name">
-          Namn <span className="location-required">*</span>
+          Namn <span className="form-required">*</span>
         </label>
         <input
           id="location-name"
@@ -64,9 +64,9 @@ export function LocationForm({ onSubmit, initialLocation, onCancel }: LocationFo
         />
       </div>
 
-      <div className="location-field">
+      <div className="form-field">
         <label htmlFor="location-city">
-          Stad <span className="location-required">*</span>
+          Stad <span className="form-required">*</span>
         </label>
         <input
           id="location-city"
@@ -75,7 +75,7 @@ export function LocationForm({ onSubmit, initialLocation, onCancel }: LocationFo
         />
       </div>
 
-      <div className="location-field">
+      <div className="form-field">
         <label htmlFor="location-address">Adress</label>
         <input
           id="location-address"
@@ -85,18 +85,18 @@ export function LocationForm({ onSubmit, initialLocation, onCancel }: LocationFo
       </div>
 
       {error && (
-        <p className="location-error" role="alert">
+        <p className="form-error" role="alert">
           {error}
         </p>
       )}
 
-      <div className="location-actions">
-        <button type="submit" className="location-submit" disabled={isSaving}>
+      <div className="form-actions">
+        <button type="submit" className="form-submit" disabled={isSaving}>
           {isSaving ? "Sparar..." : isEditing ? "Spara ändringar" : "Spara plats"}
         </button>
 
         {onCancel && (
-          <button type="button" className="location-cancel" onClick={onCancel}>
+          <button type="button" className="form-cancel" onClick={onCancel}>
             Avbryt
           </button>
         )}

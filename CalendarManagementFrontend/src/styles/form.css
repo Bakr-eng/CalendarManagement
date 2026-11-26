@@ -1,5 +1,12 @@
-.location-form {
+/* 
+   Gemensam stil för formulär (kunder, platser ...)
+   Använd klasserna: form, form-field, form-required,
+   form-error, form-actions, form-submit, form-cancel
+*/
+
+.form {
   --form-accent: #ee6a2c;
+  --form-danger: #dc2626;
 
   display: flex;
   flex-direction: column;
@@ -15,25 +22,29 @@
   text-align: left;
 }
 
-.location-form h2 {
+.form h2 {
   margin: 0;
   font-size: 22px;
   color: var(--text-h);
 }
 
-.location-field {
+/* ---------- Ett fält: etikett ovanför input ---------- */
+
+.form-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.location-field label {
+.form-field label {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-h);
 }
 
-.location-field input {
+.form-field input,
+.form-field select,
+.form-field textarea {
   width: 100%;
   box-sizing: border-box;
   padding: 10px 12px;
@@ -44,24 +55,33 @@
   font: inherit;
 }
 
-.location-field input:focus {
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
   outline: 2px solid var(--form-accent);
   outline-offset: 1px;
   border-color: var(--form-accent);
 }
 
-.location-required {
+/* Stjärnan på obligatoriska fält */
+.form-required {
   color: var(--form-accent);
 }
 
-.location-error {
+.form-error {
   margin: 0;
-  color: #dc2626;
+  color: var(--form-danger);
   font-size: 14px;
 }
 
-.location-submit {
-  align-self: flex-start;
+/* ---------- Knappar ---------- */
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.form-submit {
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
@@ -72,22 +92,16 @@
   cursor: pointer;
 }
 
-.location-submit:hover {
+.form-submit:hover {
   filter: brightness(1.1);
 }
 
-.location-submit:disabled {
+.form-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-
-.location-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.location-cancel {
+.form-cancel {
   padding: 10px 20px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -97,8 +111,7 @@
   cursor: pointer;
 }
 
-.location-cancel:hover {
-  
-  color: #dc2626;
-  border-color: #dc2626;
+.form-cancel:hover {
+  color: var(--form-danger);
+  border-color: var(--form-danger);
 }
