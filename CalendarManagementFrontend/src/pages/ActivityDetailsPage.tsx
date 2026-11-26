@@ -135,7 +135,14 @@ const overallStatus = getOverallStatus();
           </p>
 
           <p>
-            <strong>Status:</strong> {overallStatus}
+            <strong>Status:</strong>{" "}
+{
+  overallStatus === "NotStarted"
+    ? "Ej påbörjad"
+    : overallStatus === "InProgress"
+    ? "Pågående"
+    : "Klar"
+}
           </p>
 
           <p>
