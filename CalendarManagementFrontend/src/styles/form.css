@@ -115,3 +115,43 @@
   color: var(--form-danger);
   border-color: var(--form-danger);
 }
+
+
+
+
+/* ---------- Sidhuvud på listsidor: rubrik + "Lägg till"-knapp ----------  Customer & location*/
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 900px;
+  margin: 24px auto 0;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.page-add-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #ee6a2c;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.page-add-button:hover {
+  filter: brightness(1.1);
+}
+
+.page-add-button:focus-visible {
+  outline: 2px solid #ee6a2c;
+  outline-offset: 2px;
+}
