@@ -25,9 +25,19 @@ const sections: { id: Section; label: string }[] = [
 
 type Props = {
   children: ReactNode;
+  sectionStatuses: Record<
+    string,
+    {
+      status: string;
+      itemCount: number;
+    }
+  >;
 };
 
-export default function ActivityDetailsLayout({ children }: Props) {
+export default function ActivityDetailsLayout({
+  children,
+  sectionStatuses,
+}: Props) {
   const [activeSection, setActiveSection] =
     useState<Section>("overview");
 
@@ -35,50 +45,76 @@ export default function ActivityDetailsLayout({ children }: Props) {
     section => section.id === activeSection
   );
 
+  const getStatusIcon = (status?: string) => {
+    switch (status) {
+      case "Complete":
+        return "🟢";
+      case "InProgress":
+        return "🟠";
+      default:
+        return "🔴";
+    }
+  };
+
   return (
-  <>
-    <header className="activity-topbar">
-      <Link to="/calendar" className="activity-back">
-        ← Tillbaka till kalendern
-      </Link>
-    </header>
+    <>
+      <header className="activity-topbar">
+        <Link to="/calendar" className="activity-back">
+          ← Tillbaka till kalendern
+        </Link>
+      </header>
 
-    <div className="activity-layout">
-      <aside className="activity-sidebar">
-        <h2>Aktivitet</h2>
+      <div className="activity-layout">
+        <aside className="activity-sidebar">
+          <h2>Aktivitet</h2>
 
-        <nav aria-label="Aktivitetsmeny">
-          {sections.map(section => (
-            <button
-              key={section.id}
-              type="button"
-              className={
-                activeSection === section.id
-                  ? "activity-nav-item active"
-                  : "activity-nav-item"
-              }
-              onClick={() => setActiveSection(section.id)}
-            >
-              {section.label}
-            </button>
-          ))}
-        </nav>
-      </aside>
+          <nav aria-label="Aktivitetsmeny">
+            {sections.map(section => (
+              <button
+                key={section.id}
+                type="button"
+                className={
+                  activeSection === section.id
+                    ? "activity-nav-item active"
+                    : "activity-nav-item"
+                }
+                onClick={() => setActiveSection(section.id)}
+              >
+                {getStatusIcon(
+                  section.label === "Hotell"
+                    ? sectionStatuses["Hotell"]?.status
+                    : section.label === "Dagschema"
+                    ? sectionStatuses["Dagsschema"]?.status
+                    : section.label === "Resa"
+                    ? sectionStatuses["Resa"]?.status 
+                    : section.label === "Teknik"
+                    ? sectionStatuses["Teknik"]?.status
+                    : section.label === "Kontakt"
+                    ? sectionStatuses["Kontakt"]?.status
+                    : section.label === "Plats"
+                    ? sectionStatuses["Plats"]?.status
+                    : undefined
+                )}{" "}
+                {section.label}
+              </button>
+            ))}
+          </nav>
+        </aside>
 
-      <main className="activity-main">
-        {activeSection === "overview" ? (
-          children
-        ) : (
-          <section className="activity-placeholder">
-            <h1>{selected?.label}</h1>
-            <p>
-              Här kommer innehållet för {selected?.label.toLowerCase()}
-              {" "}att visas.
-            </p>
-          </section>
-        )}
-      </main>
-    </div>
+        <main className="activity-main">
+          {activeSection === "overview" ? (
+            children
+          ) : (
+            <section className="activity-placeholder">
+              <h1>{selected?.label}</h1>
+              <p>
+                Här kommer innehållet för{" "}
+                {selected?.label.toLowerCase()} att visas.
+              </p>
+            </section>
+          )}
+        </main>
+      </div>
     </>
   );
 }
