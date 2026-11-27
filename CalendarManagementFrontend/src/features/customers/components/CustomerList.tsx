@@ -1,4 +1,4 @@
-import type { Customer } from "../types/customer";
+import { customerTypeLabels, type Customer } from "../types/customer";
 import "../../../styles/table.css";
 
 interface CustomerListProps {
@@ -17,6 +17,8 @@ export function CustomerList({ customers, onSelect }: CustomerListProps) {
         <thead>
           <tr>
             <th>Namn</th>
+            <th>Kundtyp</th>
+            <th>Org.nr / Personnr</th>
             <th>Kontaktperson</th>
             <th>E-post</th>
             <th>Telefon</th>
@@ -29,6 +31,10 @@ export function CustomerList({ customers, onSelect }: CustomerListProps) {
                 <button type="button" className="row-button">
                   {customer.name}
                 </button>
+              </td>
+              <td>{customerTypeLabels[customer.customerType]}</td>
+              <td className={customer.identityNumber ? undefined : "cell-empty"}>
+                {customer.identityNumber ?? "–"}
               </td>
               <td className={customer.contactPerson ? undefined : "cell-empty"}>
                 {customer.contactPerson ?? "–"}

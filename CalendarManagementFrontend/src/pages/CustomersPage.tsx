@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/form.css";
+import "../styles/page.css";
 import { Modal } from "../components/ui/Modal";
 import { CustomerDetails } from "../features/customers/components/CustomerDetails";
 import { CustomerForm } from "../features/customers/components/CustomerForm";
@@ -8,25 +8,43 @@ import { useCustomers } from "../features/customers/hooks/useCustomers";
 import type { Customer } from "../features/customers/types/customer";
 
 function CustomersPage() {
-  const { customers, isLoading, error, addCustomer, editCustomer, removeCustomer } = useCustomers();
+  const { customers, isLoading, error, addCustomer, editCustomer, removeCustomer, loadCustomer } =
+    useCustomers();
 
   // Kunden som visas i rutan, eller null om rutan är stängd
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  // true medan hela kunden (med fullt personnummer) hämtas
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   // false = visa detaljer, true = visa formuläret för att uppdatera
   const [isEditing, setIsEditing] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   // true = rutan för att lägga till visas
   const [isCreating, setIsCreating] = useState(false);
 
-  function openDetails(customer: Customer) {
+  async function openDetails(customer: Customer) {
+    // Visa rutan direkt med namnet från listan...
     setSelectedCustomer(customer);
     setIsEditing(false);
+    setLoadError(null);
     setDeleteError(null);
+    setIsLoadingDetails(true);
+
+    // ...och hämta sedan kunden igen, för i listan är personnumret maskerat
+    try {
+      const fullCustomer = await loadCustomer(customer.id);
+      setSelectedCustomer(fullCustomer);
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : "Något gick fel");
+    } finally {
+      setIsLoadingDetails(false);
+    }
   }
 
   function closeModal() {
     setSelectedCustomer(null);
     setIsEditing(false);
+    setLoadError(null);
     setDeleteError(null);
   }
 
@@ -82,7 +100,13 @@ function CustomersPage() {
             </p>
           )}
 
-          {isEditing ? (
+          {loadError ? (
+            <p className="modal-error" role="alert">
+              {loadError}
+            </p>
+          ) : isLoadingDetails ? (
+            <p>Laddar...</p>
+          ) : isEditing ? (
             <CustomerForm
               initialCustomer={selectedCustomer}
               onSubmit={async (request) => {
