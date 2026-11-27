@@ -33,6 +33,16 @@ public static class ActivityEndpoints
                 : Results.Ok(activity);
         })
         .WithName("GetActivityById");
+        group.MapGet("/test-pdf", (
+    IPdfExportService pdfService) =>
+{
+    var pdf = pdfService.GenerateTestPdf();
+
+    return Results.File(
+        pdf,
+        "application/pdf",
+        "test.pdf");
+});
 
         group.MapPost("/", async (
             CreateActivityRequest request,

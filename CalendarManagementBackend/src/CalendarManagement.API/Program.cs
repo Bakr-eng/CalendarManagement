@@ -6,6 +6,9 @@ using CalendarManagement.Infrastructure.Data;
 using CalendarManagement.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using QuestPDF.Infrastructure;
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +43,9 @@ builder.Services.AddScoped<ILocationService, LocationService>();
 // Checklist Items
 builder.Services.AddScoped<IChecklistItemRepository, ChecklistItemRepository>();
 builder.Services.AddScoped<IChecklistItemService, ChecklistItemService>();
+
+// PDF Export
+builder.Services.AddScoped<IPdfExportService, PdfExportService>();
 
 var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")

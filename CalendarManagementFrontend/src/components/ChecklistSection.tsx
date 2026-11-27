@@ -120,7 +120,7 @@ useEffect(() => {
     status.status,
     items.length
   );
-}, [title, status.status, onStatusChange]);
+}, [title, status.status, items.length]);
 
   return (
     <div
