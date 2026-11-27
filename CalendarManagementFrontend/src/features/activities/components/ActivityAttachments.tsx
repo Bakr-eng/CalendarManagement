@@ -47,13 +47,47 @@ function isImage(file: Attachment) {
     setFiles(data);
   }
 
-  useEffect(() => {
-    if (!Number.isInteger(activityId) || activityId <= 0) {
-      return;
-    }
+  
+useEffect(() => {
+  if (!Number.isInteger(activityId) || activityId <= 0) {
+    return;
+  }
 
-    loadFiles().catch(err => setError(err.message));
-  }, [activityId]);
+  let cancelled = false;
+
+  async function fetchAttachments() {
+    try {
+      const response = await fetch(
+        `/api/activities/${activityId}/attachments`
+      );
+
+      if (!response.ok) {
+        throw new Error("Kunde inte hämta bilagor.");
+      }
+
+      const data: Attachment[] = await response.json();
+
+      if (!cancelled) {
+        setFiles(data);
+      }
+    } catch (err) {
+      if (!cancelled) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Kunde inte hämta bilagor."
+        );
+      }
+    }
+  }
+
+  void fetchAttachments();
+
+  return () => {
+    cancelled = true;
+  };
+}, [activityId]);
+
 
   async function uploadFiles(selected: FileList | null) {
     if (!selected?.length || uploading) return;
