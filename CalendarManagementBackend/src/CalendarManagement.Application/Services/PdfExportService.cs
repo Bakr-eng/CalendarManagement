@@ -2,12 +2,15 @@ using CalendarManagement.Application.DTOs;
 using CalendarManagement.Application.Interfaces;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
+using CalendarManagement.Domain.Entities;
 
 namespace CalendarManagement.Application.Services;
 
 public class PdfExportService : IPdfExportService
 {
-    public byte[] GenerateActivityPdf(ActivityDto activity)
+    public byte[] GenerateActivityPdf(
+    ActivityDto activity,
+    List<ChecklistItem> checklistItems)
     {
         return Document.Create(container =>
         {
@@ -55,6 +58,20 @@ public class PdfExportService : IPdfExportService
 
                         column.Item().Text(
                             $"Location: {locationText}");
+                            column.Item().PaddingTop(20);
+
+column.Item()
+    .Text("Checklist")
+    .FontSize(16)
+    .Bold();
+
+foreach (var item in checklistItems)
+{
+    var marker = item.Completed ? "[X]" : "[ ]";
+
+    column.Item().Text(
+        $"{item.Section} - {marker} {item.Text}");
+}
                     });
 
                 page.Footer()

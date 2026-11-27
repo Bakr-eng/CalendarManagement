@@ -35,25 +35,32 @@ public static class ActivityEndpoints
         .WithName("GetActivityById");
 
         group.MapGet("/{id:int}/pdf", async (
-            int id,
-            IActivityService activityService,
-            IPdfExportService pdfService,
-            CancellationToken ct) =>
-        {
-            var activity = await activityService.GetByIdAsync(id, ct);
+    int id,
+    IActivityService activityService,
+    IChecklistItemService checklistItemService,
+    IPdfExportService pdfService,
+    CancellationToken ct) =>
+{
+    var activity = await activityService.GetByIdAsync(id, ct);
 
-            if (activity is null)
-            {
-                return Results.NotFound();
-            }
+    if (activity is null)
+    {
+        return Results.NotFound();
+    }
 
-            var pdf = pdfService.GenerateActivityPdf(activity);
+    var checklistItems =
+        await checklistItemService.GetByActivityIdAsync(id, ct);
 
-            return Results.File(
-                pdf,
-                "application/pdf",
-                $"activity-{id}.pdf");
-        });
+    var pdf = pdfService.GenerateActivityPdf(
+        activity,
+        checklistItems);
+
+    return Results.File(
+        pdf,
+        "application/pdf",
+        $"activity-{id}.pdf");
+});
+
 
         group.MapPost("/", async (
             CreateActivityRequest request,
