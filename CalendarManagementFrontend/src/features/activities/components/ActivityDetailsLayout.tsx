@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, type ReactNode } from "react";
 import "./ActivityDetailsLayout.css";
+import ActivityAttachments from "./ActivityAttachments";
 
 type Section =
   | "overview"
@@ -104,12 +105,14 @@ export default function ActivityDetailsLayout({
         <main className="activity-main">
           {activeSection === "overview" ? (
             children
-          ) : (
+          ) : activeSection === "attachments" ? (
+            <ActivityAttachments />
+          ) :(
             <section className="activity-placeholder">
               <h1>{selected?.label}</h1>
               <p>
                 Här kommer innehållet för{" "}
-                {selected?.label.toLowerCase()} att visas.
+                {selected?.label.toLowerCase()} {" "} att visas.
               </p>
             </section>
           )}

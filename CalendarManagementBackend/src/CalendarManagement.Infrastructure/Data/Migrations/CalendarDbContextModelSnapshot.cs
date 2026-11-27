@@ -60,6 +60,45 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
                     b.ToTable("Activities");
                 });
 
+            modelBuilder.Entity("CalendarManagement.Domain.Entities.ActivityAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UploadedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("ActivityAttachments");
+                });
+
             modelBuilder.Entity("CalendarManagement.Domain.Entities.ChecklistItem", b =>
                 {
                     b.Property<int>("Id")
@@ -196,6 +235,15 @@ namespace CalendarManagement.Infrastructure.Data.Migrations
                     b.Navigation("Location");
 
                     b.Navigation("ResponsiblePerson");
+                });
+
+            modelBuilder.Entity("CalendarManagement.Domain.Entities.ActivityAttachment", b =>
+                {
+                    b.HasOne("CalendarManagement.Domain.Entities.Activity", null)
+                        .WithMany()
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CalendarManagement.Domain.Entities.ChecklistItem", b =>
