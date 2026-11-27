@@ -1,6 +1,6 @@
-namespace CalendarManagement.Application.Interfaces;
+using CalendarManagement.Application.DTOs;
 
 public interface IPdfExportService
 {
-    byte[] GenerateTestPdf();
+    byte[] GenerateActivityPdf(ActivityDto activity);
 }

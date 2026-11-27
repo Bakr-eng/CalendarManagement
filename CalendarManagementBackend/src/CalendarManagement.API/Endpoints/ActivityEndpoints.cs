@@ -12,9 +12,9 @@ public static class ActivityEndpoints
             .WithTags("Activities");
 
         group.MapGet("/", async (
-      [AsParameters] ActivityFilter filter,
-      IActivityService service,
-      CancellationToken ct) =>
+            [AsParameters] ActivityFilter filter,
+            IActivityService service,
+            CancellationToken ct) =>
         {
             var activities = await service.GetAllAsync(filter, ct);
 
@@ -33,16 +33,27 @@ public static class ActivityEndpoints
                 : Results.Ok(activity);
         })
         .WithName("GetActivityById");
-        group.MapGet("/test-pdf", (
-    IPdfExportService pdfService) =>
-{
-    var pdf = pdfService.GenerateTestPdf();
 
-    return Results.File(
-        pdf,
-        "application/pdf",
-        "test.pdf");
-});
+        group.MapGet("/{id:int}/pdf", async (
+            int id,
+            IActivityService activityService,
+            IPdfExportService pdfService,
+            CancellationToken ct) =>
+        {
+            var activity = await activityService.GetByIdAsync(id, ct);
+
+            if (activity is null)
+            {
+                return Results.NotFound();
+            }
+
+            var pdf = pdfService.GenerateActivityPdf(activity);
+
+            return Results.File(
+                pdf,
+                "application/pdf",
+                $"activity-{id}.pdf");
+        });
 
         group.MapPost("/", async (
             CreateActivityRequest request,
