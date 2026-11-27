@@ -123,6 +123,12 @@ const overallStatus = getOverallStatus();
         }}
       >
         <h2>Aktivitet #{activity.id}</h2>
+        <button
+          type="button"
+         onClick={() => console.log("Export PDF")}
+        >
+         Export PDF
+         </button>
 
         <div style={{ marginTop: "20px" }}>
           <p>
