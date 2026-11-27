@@ -4,6 +4,9 @@ using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Application.Services;
 using CalendarManagement.Infrastructure.Data;
 using CalendarManagement.Infrastructure.Repositories;
+using CalendarManagement.Infrastructure.Storage;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +40,11 @@ builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IChecklistItemRepository, ChecklistItemRepository>();
 builder.Services.AddScoped<IChecklistItemService, ChecklistItemService>();
 
+// Attachments
+builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+builder.Services.AddSingleton<IAttachmentStorage, LocalAttachmentStorage>();
+
 var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? [];
@@ -49,8 +57,37 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
+const long maxUploadRequestSize = 110L * 1024 * 1024;
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = maxUploadRequestSize;
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = maxUploadRequestSize;
+});
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN";
+});
+
 var app = builder.Build();
 
+app.MapGet("/api/antiforgery/token",
+    (HttpContext context, IAntiforgery antiforgery) =>
+    {
+        var tokens = antiforgery.GetAndStoreTokens(context);
+
+        context.Response.Headers.CacheControl = "no-store";
+
+        return Results.Ok(new
+        {
+            token = tokens.RequestToken
+        });
+    });
 
 app.UseExceptionHandler();
 
@@ -64,6 +101,7 @@ else
 }
 
 app.UseCors("Frontend");
+app.UseAntiforgery();
 
 app.MapControllers();
 
@@ -72,5 +110,6 @@ app.MapCustomerEndpoints();
 app.MapLocationEndpoints();
 app.MapUserEndpoints();
 app.MapChecklistItemEndpoints();
+app.MapAttachmentEndpoints();
 
 app.Run();
