@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from "../api/customersApi";
+import {
+  createCustomer,
+  deleteCustomer,
+  getCustomer,
+  getCustomers,
+  updateCustomer,
+} from "../api/customersApi";
 import type { Customer, CreateCustomerRequest, UpdateCustomerRequest } from "../types/customer";
-
-function sortByName(list: Customer[]): Customer[] {
-  return [...list].sort((a, b) => a.name.localeCompare(b.name, "sv"));
-}
 
 export function useCustomers() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -30,14 +32,18 @@ export function useCustomers() {
     };
   }, []);
 
+  async function reloadCustomers() {
+    setCustomers(await getCustomers());
+  }
+
   async function addCustomer(request: CreateCustomerRequest) {
-    const created = await createCustomer(request);
-    setCustomers((prev) => sortByName([...prev, created]));
+    await createCustomer(request);
+    await reloadCustomers();
   }
 
   async function editCustomer(id: number, request: UpdateCustomerRequest) {
-    const updated = await updateCustomer(id, request);
-    setCustomers((prev) => sortByName(prev.map((c) => (c.id === id ? updated : c))));
+    await updateCustomer(id, request);
+    await reloadCustomers();
   }
 
   async function removeCustomer(id: number) {
@@ -45,5 +51,10 @@ export function useCustomers() {
     setCustomers((prev) => prev.filter((c) => c.id !== id));
   }
 
-  return { customers, isLoading, error, addCustomer, editCustomer, removeCustomer };
+  // Hämtar en kund med hela personnumret, till detaljrutan
+  function loadCustomer(id: number) {
+    return getCustomer(id);
+  }
+
+  return { customers, isLoading, error, addCustomer, editCustomer, removeCustomer, loadCustomer };
 }

@@ -1,4 +1,4 @@
-import type { Customer } from "../types/customer";
+import { customerTypeLabels, identityNumberLabels, type Customer } from "../types/customer";
 
 interface CustomerDetailsProps {
   customer: Customer;
@@ -12,6 +12,12 @@ export function CustomerDetails({ customer, onEdit, onDelete }: CustomerDetailsP
       <dl className="details-list">
         <dt>Namn</dt>
         <dd>{customer.name}</dd>
+
+        <dt>Kundtyp</dt>
+        <dd>{customerTypeLabels[customer.customerType]}</dd>
+
+        <dt>{identityNumberLabels[customer.customerType]}</dt>
+        <dd>{customer.identityNumber ?? "–"}</dd>
 
         <dt>Kontaktperson</dt>
         <dd>{customer.contactPerson ?? "–"}</dd>

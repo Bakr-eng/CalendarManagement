@@ -1,8 +1,9 @@
 ﻿using CalendarManagement.Application.DTOs;
+using CalendarManagement.Application.Exceptions;
 using CalendarManagement.Application.Interfaces;
 using CalendarManagement.Application.Services;
 using CalendarManagement.Domain.Entities;
-using CalendarManagement.Application.Exceptions;
+using CalendarManagement.Domain.Enums;
 using Moq;
 
 namespace CalendarManagement.Tests.Services;
@@ -66,6 +67,28 @@ public class CustomerServiceTests
         Assert.Empty(result);
     }
 
+    [Fact]
+    public async Task GetAllAsync_PrivateCustomer_MasksPersonalNumber()
+    {
+        // Arrange
+        var customers = new List<Customer>
+        {
+            new() { Id = 1, Name = "Tolvan", CustomerType = CustomerType.Private, IdentityNumber = "19121212-1212" },
+            new() { Id = 2, Name = "Alfa AB", CustomerType = CustomerType.Company, IdentityNumber = "556012-5790" }
+        };
+
+        _repositoryMock
+            .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(customers);
+
+        // Act
+        var result = await _service.GetAllAsync();
+
+        // Assert – personnumret döljs, organisationsnumret visas
+        Assert.Equal("19121212-****", result[0].IdentityNumber);
+        Assert.Equal("556012-5790", result[1].IdentityNumber);
+    }
+
     // ---------- GetByIdAsync ----------
 
     [Fact]
@@ -101,6 +124,30 @@ public class CustomerServiceTests
 
         // Assert
         Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_PrivateCustomer_ReturnsFullPersonalNumber()
+    {
+        // Arrange
+        var customer = new Customer
+        {
+            Id = 1,
+            Name = "Tolvan",
+            CustomerType = CustomerType.Private,
+            IdentityNumber = "19121212-1212"
+        };
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(1, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(customer);
+
+        // Act
+        var result = await _service.GetByIdAsync(1);
+
+        // Assert – i detaljerna visas hela numret
+        Assert.NotNull(result);
+        Assert.Equal("19121212-1212", result.IdentityNumber);
     }
 
     // ---------- CreateAsync ----------
@@ -288,5 +335,5 @@ public class CustomerServiceTests
         // Assert
         Assert.False(result);
     }
-
-}   
+   
+}
